@@ -1,11 +1,14 @@
-import ScreenLoginSignup from "./components/screens/ScreenLoginSignup/ScreenLoginSignup"
+import { BrowserRouter } from "react-router";
+import AppRouter from "./routes/AppRouter";
 
 function App() {
   return (
     <>
-      <ScreenLoginSignup/>
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

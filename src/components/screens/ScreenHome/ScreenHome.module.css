@@ -1,0 +1,66 @@
+.screenHome{
+display: flex;
+flex-direction: column;
+}
+
+.bannerSection{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.bannerText{
+    background: rgb(190, 190, 190);
+    width: 100%;
+    font-family: "Unbounded", sans-serif;
+}
+.bannerImages{
+    display: flex;
+    width: 100%;
+    height: auto;
+}
+
+.bannerImages img{
+    flex: 1; /* cada imagen ocupa el mismo espacio */
+    aspect-ratio: 1/1; /* cuadrado perfecto */
+    width: 100%;
+    height: auto;
+    object-fit: fill;
+}
+
+.whySection{
+    display: flex;
+    flex-direction: column;
+    font-family: "Unbounded", sans-serif;
+    align-items: center;
+    text-align: center;
+    margin-top: 25px;
+}
+
+.whyText{
+    width: 600px;
+    font-size: 18px;
+}
+
+.highlight{
+    color: #209288;
+}
+
+.featuredSection{
+display: flex;
+flex-direction: column;
+font-family: "Unbounded", sans-serif;
+margin-top: 20px;
+}
+
+.featuredProducts{
+    display: grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap: 10rem;
+    margin: 0 auto; 
+    margin: 25px;
+}
+
+.featuredTitle{
+    margin-left: 20px;
+}
