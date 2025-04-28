@@ -3,25 +3,31 @@ import styles from "./ScreenLoginSignup.module.css";
 import user_icon from "./assets/person.png";
 import email_icon from "./assets/email.png";
 import password_icon from "./assets/password.png";
+import logo from "../../assets/logo.png";
 import { useState } from "react";
 
 const ScreenLoginSignup = () => {
-
-  const [action, setAction] = useState("Login")
+  const [action, setAction] = useState("Login");
 
   return (
     <>
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.text}>{action}</div>
-          <div className={styles.underline}></div>
+          <div className={styles.logo}>
+            <img src={logo} alt="" />
+          </div>
         </div>
         <div className={styles.inputs}>
-          {action === "Login"?<div></div>:<div className={styles.input}>
-            <img src={user_icon} alt="" />
-            <input type="text" placeholder="Name" />
-          </div>}
-          
+          {action === "Login" ? (
+            <div></div>
+          ) : (
+            <div className={styles.input}>
+              <img src={user_icon} alt="" />
+              <input type="text" placeholder="Name" />
+            </div>
+          )}
+
           <div className={styles.input}>
             <img src={email_icon} alt="" />
             <input type="email" placeholder="Email" />
@@ -31,11 +37,33 @@ const ScreenLoginSignup = () => {
             <input type="password" placeholder="Password" />
           </div>
         </div>
-        {action === "Sign Up"?<div></div>:<div className={styles.forgot_password}>Lost Password? <span>Click Here!</span></div>}
-        
+        {action === "Sign Up" ? (
+          <div></div>
+        ) : (
+          <div className={styles.forgot_password}>
+            Lost Password? <span>Click Here!</span>
+          </div>
+        )}
+
         <div className={styles.submit_container}>
-          <div className={action==="Login"? styles.submit_gray : styles.submit} onClick={()=>{setAction("Sign Up")}}>Sign Up</div>
-          <div className={action==="Sign Up"? styles.submit_gray : styles.submit} onClick={()=>{setAction("Login")}}>Login</div>
+          <div
+            className={action === "Login" ? styles.submit_gray : styles.submit}
+            onClick={() => {
+              setAction("Sign Up");
+            }}
+          >
+            Sign Up
+          </div>
+          <div
+            className={
+              action === "Sign Up" ? styles.submit_gray : styles.submit
+            }
+            onClick={() => {
+              setAction("Login");
+            }}
+          >
+            Login
+          </div>
         </div>
       </div>
     </>

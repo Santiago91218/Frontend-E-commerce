@@ -25,15 +25,20 @@
     color: black;
 }
 
-.underline{
-    width: 61px;
-    height: 6px;
-    border-radius:9px ;
-    background: black;
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.logo img {
+    height: 10rem;
 }
 
 .inputs{
-    margin-top: 55px;
+    margin-top: 25px;
     display: flex;
     flex-direction: column;
     gap: 25px;
