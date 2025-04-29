@@ -13,6 +13,7 @@ flex-direction: column;
     background: rgb(190, 190, 190);
     width: 100%;
     font-family: "Unbounded", sans-serif;
+    
 }
 .bannerImages{
     display: flex;
@@ -51,14 +52,14 @@ display: flex;
 flex-direction: column;
 font-family: "Unbounded", sans-serif;
 margin-top: 20px;
+margin-bottom: 20px;
 }
 
 .featuredProducts{
     display: grid;
     grid-template-columns:repeat(4, 1fr);
-    gap: 10rem;
+    gap: 5rem;
     margin: 0 auto; 
-    margin: 25px;
 }
 
 .featuredTitle{

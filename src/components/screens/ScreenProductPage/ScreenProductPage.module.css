@@ -1,0 +1,129 @@
+.screenProductPage {
+  display: flex;
+  flex-direction: column;
+  font-family: "Unbounded", sans-serif;
+}
+
+.infoText {
+  background: rgb(190, 190, 190);
+  width: 100%;
+  text-align: center;
+}
+
+.productDetail {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem;
+  margin-top: 25px;
+}
+.mainImage {
+  max-width: 700px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 25rem;
+}
+
+.mainImage img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.473);
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+}
+.sizeGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  max-width: 350px;
+  gap: 10px;
+}
+.sizeButton {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1/1;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.171);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.sizeButton:hover,
+.sizeButton:focus {
+  background-color: #e0e0e0;
+  transform: scale(1.05);
+}
+
+.sizeButton.selected {
+  background-color: #175992;
+  color: white;
+  font-weight: bold;
+}
+
+.quantityContainer {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  margin-top: 25px;
+}
+
+.quantityButtons {
+  display: flex;
+  margin-left: 15px;
+  gap: 5px;
+}
+.quantityButtons button {
+  all: unset;
+  width: 25px;
+  padding: 3px;
+  border: 1px solid gray;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.178);
+  cursor: pointer;
+}
+
+.addToCartButton {
+  background: #175992;
+  width: auto;
+  padding: 10px;
+  text-align: center;
+  color: #fff;
+  margin-top: 25px;
+  cursor: pointer;
+}
+
+.addToCartButton button {
+  all: unset;
+}
+
+.addToCartButton button:hover,
+.addToCartButton button:focus {
+  background-color: #0f3f68;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.featuredSection {
+  display: flex;
+  flex-direction: column;
+  font-family: "Unbounded", sans-serif;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.featuredProducts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5rem;
+  margin: 0 auto;
+}
+
+.featuredTitle {
+  margin-left: 20px;
+}

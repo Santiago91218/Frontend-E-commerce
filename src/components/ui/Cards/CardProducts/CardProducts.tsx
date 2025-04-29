@@ -1,36 +1,14 @@
+
 import styles from "./CardProducts.module.css";
+import { products } from "../../../../types/products";
+
 
 const CardProducts = () => {
-  const products = [
-    {
-      id: 1,
-      name: "Air Force 1",
-      price: 200000,
-      image:
-        "https://nikearprod.vtexassets.com/arquivos/ids/531562-800-800?width=800&height=800&aspect=true",
-    },
-    {
-      id: 2,
-      name: "Air Max 90",
-      price: 250000,
-      image:
-        "https://nikearprod.vtexassets.com/arquivos/ids/492740-800-800?width=800&height=800&aspect=true",
-    },
-    {
-      id: 3,
-      name: "Nike Dunk Low",
-      price: 230000,
-      image:
-        "https://nikearprod.vtexassets.com/arquivos/ids/491390-800-800?width=800&height=800&aspect=true",
-    },
-    {
-      id: 4,
-      name: "Jordan 1 Retro",
-      price: 300000,
-      image:
-        "https://nikearprod.vtexassets.com/arquivos/ids/492343-800-800?width=800&height=800&aspect=true",
-    },
-  ];
+
+
+  const handleNavigate= (id: number) => {
+    window.location.href = `/product/${id}`;
+  };
 
   return (
     <>
@@ -47,7 +25,7 @@ const CardProducts = () => {
             </div>
 
             <div className={styles.productActions}>
-              <button className={styles.productButton}>Ver más</button>
+              <button className={styles.productButton} onClick={() => handleNavigate(product.id)}>Ver más</button>
             </div>
           </div>
         </div>
