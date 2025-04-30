@@ -12,8 +12,10 @@ const ScreenProductPage = () => {
   const [cantidad, setCantidad] = useState<number>(1);
   const increment = () => setCantidad((prev) => (prev < 10 ? prev + 1 : prev));
   const decrement = () => setCantidad((prev) => (prev > 1 ? prev - 1 : prev));
-
-  const [talleSeleccionado, setTalleSeleccionado] = useState<number | null>(null);
+  const [mainImage, setMainImage] = useState(product?.image);
+  const [talleSeleccionado, setTalleSeleccionado] = useState<number | null>(
+    null
+  );
 
   return (
     <>
@@ -26,10 +28,18 @@ const ScreenProductPage = () => {
 
         <div className={styles.productDetail}>
           <div className={styles.secondaryImage}>
-            <img src="" alt="" />
+            {product?.images.map((img, index) => (
+              <img
+                key={index}
+                src={img.url}
+                alt={`Vista ${img.tipo}`}
+                className={styles.thumbnail} 
+                onClick={() => setMainImage(img.url)}
+              />
+            ))}
           </div>
           <div className={styles.mainImage}>
-            <img src={product?.image} alt={product?.name} />
+          <img src={mainImage} alt={product?.name} />
           </div>
 
           <div className={styles.productInfo}>
@@ -55,9 +65,7 @@ const ScreenProductPage = () => {
                 ))}
               </div>
               <div className={styles.quantityContainer}>
-                <span>
-                  Cantidad: {cantidad}
-                </span>
+                <span>Cantidad: {cantidad}</span>
 
                 <div className={styles.quantityButtons}>
                   <button onClick={increment}>+</button>
