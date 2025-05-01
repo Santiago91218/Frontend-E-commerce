@@ -12,11 +12,8 @@ const Header = () => {
   return (
     <>
       <div className={styles.headerContainer}>
-        <div className={styles.logo}><img src={logo} alt="" /></div>
+        <div onClick={() => handleNavigate("home")} className={styles.logo}><img src={logo} alt="" /></div>
         <div className={styles.navContainer}>
-          <div onClick={() => handleNavigate("home")}>
-            <p>Inicio</p>
-          </div>
           <div onClick={() => handleNavigate("hombre")}>
             <p>Hombres</p>
           </div>
