@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { products } from "../../../types/products";
 import CardProducts from "../../ui/Cards/CardProducts/CardProducts";
 import Footer from "../../ui/Footer/Footer";
 import Header from "../../ui/Header/Header";
 import styles from "./ScreenProductPage.module.css";
 import { useParams } from "react-router";
+import { IDetalle } from "../../../types/detalles/IDetalle";
+
 
 const ScreenProductPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +18,24 @@ const ScreenProductPage = () => {
   const [talleSeleccionado, setTalleSeleccionado] = useState<number | null>(
     null
   );
+  const [producto, setProducto] = useState<IDetalle>();
+
+  useEffect(() => {
+    const fetchDetalle = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/detalles/${id}`);
+        const data: IDetalle = await response.json();
+        setProducto(data);
+        setMainImage(data.imagenes?.[0]?.url || "");
+      } catch (error) {
+        console.error("Error al obtener detalle:", error);
+      }
+    };
+
+    fetchDetalle();
+  }, [id]);
+
+  if (!producto) return <p>Cargando producto...</p>;
 
   return (
     <>
@@ -28,26 +48,30 @@ const ScreenProductPage = () => {
 
         <div className={styles.productDetail}>
           <div className={styles.secondaryImage}>
-            {product?.images.map((img, index) => (
+            {producto.imagenes.map((img, index) => (
               <img
                 key={index}
                 src={img.url}
-                alt={`Vista ${img.tipo}`}
-                className={styles.thumbnail} 
+                alt={`Vista ${img.alt}`}
+                className={styles.thumbnail}
                 onClick={() => setMainImage(img.url)}
               />
             ))}
           </div>
           <div className={styles.mainImage}>
-          <img src={mainImage} alt={product?.name} />
+            <img src={mainImage} alt={producto.imagenes[0].alt} />
           </div>
 
           <div className={styles.productInfo}>
-            <h3>{product?.name}</h3>
-            <p>Tipo: {product?.type}</p>
-            <p>Categoria: {product?.category}</p>
-            <p>Precio: ${product?.price}</p>
-            <p>Descripcion: {product?.description}</p>
+            <h3>{producto.producto.nombre}</h3>
+            <p>Tipo: {producto.producto.tipoProducto}</p>
+            <p>Categoria: {producto.producto.categoria.nombre}</p>
+            {producto.precio ? (
+              <p>Precio: ${producto.precio.precioCompra}</p>
+            ) : (
+              <p>Precio no disponible</p>
+            )}
+            <p>Descripcion: {producto.descripcion || "No disponible"}</p>
 
             <div>
               <h3>Selecciona el talle</h3>
@@ -83,7 +107,7 @@ const ScreenProductPage = () => {
         <div className={styles.featuredSection}>
           <h3 className={styles.featuredTitle}>Productos Relacionados:</h3>
           <div className={styles.featuredProducts}>
-            <CardProducts />
+            <CardProducts products={[]} />
           </div>
         </div>
 

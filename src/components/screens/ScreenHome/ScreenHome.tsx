@@ -1,9 +1,39 @@
+import { useEffect, useState } from "react";
 import CardProducts from "../../ui/Cards/CardProducts/CardProducts";
 import Footer from "../../ui/Footer/Footer";
 import Header from "../../ui/Header/Header";
 import styles from "./ScreenHome.module.css";
+import { IProducto } from "../../../types/IProducto";
+import { IDetalleDTO } from "../../../types/detalles/IDetalleDTO";
+
 
 const ScreenHome = () => {
+
+  const [productos, setProductos] = useState<IDetalleDTO[]>([])
+
+
+
+
+  useEffect(()=>{
+
+    const fetchPedido = async ()=>{
+      console.log("PRODUCTOOOOO:")
+      const response = await fetch("http://localhost:8080/detalles/DTO")
+      const data = await response.json()
+      console.log(data)
+      setProductos(data)
+      console.log("estado ",productos)
+  
+    }
+
+    fetchPedido()
+
+
+  },[])
+
+
+
+
   return (
     <>
       <div className={styles.screenHome}>
@@ -47,7 +77,7 @@ const ScreenHome = () => {
         <div className={styles.featuredSection}>
           <h3 className={styles.featuredTitle}>Productos Destacados:</h3>
           <div className={styles.featuredProducts}>
-            <CardProducts/>
+            <CardProducts products={productos}/>
           </div>
         </div>
 
