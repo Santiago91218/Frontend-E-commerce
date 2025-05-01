@@ -4,8 +4,6 @@ import { IProducto } from "../../../../types/IProducto";
 import { FC } from "react";
 import { IDetalleDTO } from "../../../../types/detalles/IDetalleDTO";
 
-
-
 interface IProps{
   products:IDetalleDTO[]
 }
