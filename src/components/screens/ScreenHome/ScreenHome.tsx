@@ -4,6 +4,9 @@ import Footer from "../../ui/Footer/Footer";
 import Header from "../../ui/Header/Header";
 import styles from "./ScreenHome.module.css";
 import { IProducto } from "../../../types/IProducto";
+import { IDetalleDTO } from "../../../types/detalles/IDetalleDTO";
+
+
 
 const ScreenHome = () => {
 
