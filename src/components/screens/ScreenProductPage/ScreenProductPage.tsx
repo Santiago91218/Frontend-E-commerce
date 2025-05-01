@@ -6,6 +6,7 @@ import Header from "../../ui/Header/Header";
 import styles from "./ScreenProductPage.module.css";
 import { useParams } from "react-router";
 import { IDetalle } from "../../../types/detalles/IDetalle";
+import SidebarFilter from "../../ui/SidebarFilter/SidebarFilter";
 
 
 const ScreenProductPage = () => {
@@ -41,11 +42,10 @@ const ScreenProductPage = () => {
     <>
       <div className={styles.screenProductPage}>
         <Header />
-
+        
         <div className={styles.infoText}>
           <p>Aceptamos todo tipo de pagos!!</p>
         </div>
-
         <div className={styles.productDetail}>
           <div className={styles.secondaryImage}>
             {producto.imagenes.map((img, index) => (
@@ -102,6 +102,7 @@ const ScreenProductPage = () => {
               </div>
             </div>
           </div>
+          
         </div>
 
         <div className={styles.featuredSection}>
@@ -109,8 +110,8 @@ const ScreenProductPage = () => {
           <div className={styles.featuredProducts}>
             <CardProducts products={[]} />
           </div>
+        
         </div>
-
         <Footer />
       </div>
     </>

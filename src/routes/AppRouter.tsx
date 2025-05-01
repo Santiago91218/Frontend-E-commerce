@@ -4,17 +4,18 @@ import ScreenProductPage from "../components/screens/ScreenProductPage/ScreenPro
 import ScreenMen from "../components/screens/ScreenCategories/ScreenMen/ScreenMen"
 import ScreenWomen from "../components/screens/ScreenCategories/ScreenWomen/ScreenWomen"
 import ScreenKids from "../components/screens/ScreenCategories/ScreenKids/ScreenKids"
+import ScreenLoginSignup from "../components/screens/ScreenLoginSignup/ScreenLoginSignup"
 
 const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="home"/>}/>
       <Route path="/home" element={<ScreenHome/>}/>
+      <Route path="/login" element={<ScreenLoginSignup/>}/>
       <Route path="/product/:id" element={<ScreenProductPage/>}/>
       <Route path="/hombre" element={<ScreenMen/>}/>
       <Route path="/mujer" element={<ScreenWomen/>}/>
       <Route path="/nino-a" element={<ScreenKids/>}/>
-      
     </Routes>
   )
 }
