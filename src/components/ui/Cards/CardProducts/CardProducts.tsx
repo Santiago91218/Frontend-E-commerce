@@ -4,7 +4,7 @@ import { IDetalleDTO } from "../../../../types/detalles/IDetalleDTO";
 
 interface IProps {
   products: IDetalleDTO[];
-
+}
 
 
 const CardProducts: FC<IProps> = ({ products }) => {
