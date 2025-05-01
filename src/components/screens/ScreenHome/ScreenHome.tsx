@@ -14,7 +14,6 @@ const ScreenHome = () => {
 
 
 
-
   useEffect(()=>{
 
     const fetchPedido = async ()=>{
@@ -78,6 +77,9 @@ const ScreenHome = () => {
         <div className={styles.featuredSection}>
           <h3 className={styles.featuredTitle}>Productos Destacados:</h3>
           <div className={styles.featuredProducts}>
+            <CardProducts products={productos}/>
+            <CardProducts products={productos}/>
+            <CardProducts products={productos}/>
             <CardProducts products={productos}/>
           </div>
         </div>

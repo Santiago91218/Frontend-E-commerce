@@ -1,6 +1,4 @@
 import styles from "./ScreenLoginSignup.module.css";
-
-import password_icon from "./assets/password.png";
 import logo from "../../assets/logo.png";
 import { useState } from "react";
 import { Lock, Mail, User } from "lucide-react";
