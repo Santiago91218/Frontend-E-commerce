@@ -7,6 +7,7 @@ import { IProducto } from "../../../types/IProducto";
 import { IDetalleDTO } from "../../../types/detalles/IDetalleDTO";
 
 
+
 const ScreenHome = () => {
 
   const [productos, setProductos] = useState<IDetalleDTO[]>([])
