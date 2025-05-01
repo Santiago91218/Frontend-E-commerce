@@ -2,7 +2,8 @@
     display: flex;
     justify-content: space-between;
     font-family: "Unbounded", sans-serif;
-    background: #1ee9d8 20%;
+    background: #209288 20%;
+    color: white;
 }
 
 .logo{
@@ -23,6 +24,10 @@
 }
 .navContainer p{
     cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.navContainer p:hover{
+    transform: scale(1.2);
 }
 
 .iconsContainer{

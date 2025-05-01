@@ -23,10 +23,10 @@ const Footer = () => {
             <Facebook />
           </div>
         </div>
-
         <div className={styles.footerCopy}>
           © 2025 Lookz. Todos los derechos reservados.
         </div>
+
       </footer>
     </>
   );
