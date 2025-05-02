@@ -1,8 +1,14 @@
-import { Facebook, Instagram, Twitter } from "lucide-react";
+import { Facebook, Instagram, Lock, Twitter } from "lucide-react";
 import logo from "../../assets/Logo.png";
 import styles from "./Footer.module.css";
+import { useNavigate } from "react-router";
+
 
 const Footer = () => {
+  const navigate = useNavigate()
+  const handleNavigate= () => {
+    navigate(`/admin`);
+  };
   return (
     <>
       <footer className={styles.footer}>
@@ -21,6 +27,7 @@ const Footer = () => {
             <Instagram />
             <Twitter />
             <Facebook />
+            <Lock onClick={handleNavigate}/>
           </div>
         </div>
         <div className={styles.footerCopy}>

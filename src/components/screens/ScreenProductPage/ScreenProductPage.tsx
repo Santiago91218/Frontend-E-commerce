@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { products } from "../../../types/products";
 import CardProducts from "../../ui/Cards/CardProducts/CardProducts";
 import Footer from "../../ui/Footer/Footer";
@@ -6,7 +6,7 @@ import Header from "../../ui/Header/Header";
 import styles from "./ScreenProductPage.module.css";
 import { useParams } from "react-router";
 import { IDetalle } from "../../../types/detalles/IDetalle";
-import SidebarFilter from "../../ui/SidebarFilter/SidebarFilter";
+
 
 
 const ScreenProductPage = () => {
@@ -71,7 +71,7 @@ const ScreenProductPage = () => {
             ) : (
               <p>Precio no disponible</p>
             )}
-            <p>Descripcion: {producto.descripcion || "No disponible"}</p>
+            <p>Descripcion: {producto.producto.descripcion || "No disponible"}</p>
 
             <div>
               <h3>Selecciona el talle</h3>
