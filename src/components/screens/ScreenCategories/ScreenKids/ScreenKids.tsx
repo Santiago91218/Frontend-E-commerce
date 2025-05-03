@@ -4,8 +4,27 @@ import styles from "./ScreenKids.module.css";
 import CardProducts from "../../../ui/Cards/CardProducts/CardProducts";
 import SidebarFilter from "../../../ui/SidebarFilter/SidebarFilter";
 import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { IDetalleDTO } from "../../../../types/detalles/IDetalleDTO";
+import { ServiceDetalle } from "../../../../services/serviceDetalle";
 
 const ScreenKids = () => {
+  const [productosInfantil, setProductosInfantil] = useState<
+    IDetalleDTO[] | any
+  >([]);
+  const detalleService = new ServiceDetalle();
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  const getProducts = async () => {
+    const productosInfantil = await detalleService.getDetallesGeneroProduct(
+      "INFANTIL"
+    );
+    setProductosInfantil(productosInfantil);
+  };
+
   return (
     <>
       <div className={styles.screenKids}>
@@ -36,7 +55,7 @@ const ScreenKids = () => {
               <Search />
             </div>
             <div className={styles.productCards}>
-              <CardProducts />
+              <CardProducts products={productosInfantil} />
             </div>
           </div>
         </div>

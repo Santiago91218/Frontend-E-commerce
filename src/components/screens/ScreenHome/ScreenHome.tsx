@@ -18,9 +18,7 @@ const ScreenHome = () => {
     const fetchPedido = async ()=>{
       const response = await fetch("http://localhost:8080/detalles/DTO")
       const data = await response.json()
-      console.log(data)
       setProductos(data)
-      console.log("estado ",productos)
   
     }
 
@@ -28,6 +26,34 @@ const ScreenHome = () => {
 
 
   },[])
+
+  
+
+  useEffect(()=>{
+
+    // try{
+      
+    // const fetchPediddo = async ()=>{
+      
+    //   const categoria:ICategoria = {
+    //     nombre:"gaga"
+    //   }
+
+    //   const url = "http://localhost:8080/categorias";
+    //   return axios.post(url, categoria,)}
+    // fetchPediddo()
+
+
+
+    // }catch(err){
+    //   console.log("ERROR CREAR: ",err)
+    // }
+
+
+  },[])
+
+
+
 
   return (
     <>

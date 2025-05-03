@@ -4,6 +4,7 @@ import { IProducto } from "../IProducto";
 
 
 export interface IDetalleDTO {
+  id:number
   producto: IProducto;
   precio: IPrecio;
   imagenPrincipal: IImagen;

@@ -5,7 +5,7 @@ export interface IProducto {
   disponible: boolean;
   nombre: string;
   tipoProducto: TipoProducto;
-  sexo: Sexo;
+  generoProducto: GeneroProducto;
   categoria: ICategoria;
   descripcion:string;
 }
@@ -17,7 +17,8 @@ export enum TipoProducto {
   PANTALON = "PANTALON",
   CAMPERA = "CAMPERA",
 }
-export enum Sexo {
+export enum GeneroProducto {
   MASCULINO = "MASCULINO",
   FEMENINO = "FEMENINO",
+  INFANTIL = "INFANTIL",
 }
