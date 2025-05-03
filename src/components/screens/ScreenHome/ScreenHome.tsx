@@ -3,7 +3,6 @@ import CardProducts from "../../ui/Cards/CardProducts/CardProducts";
 import Footer from "../../ui/Footer/Footer";
 import Header from "../../ui/Header/Header";
 import styles from "./ScreenHome.module.css";
-import { IProducto } from "../../../types/IProducto";
 import { IDetalleDTO } from "../../../types/detalles/IDetalleDTO";
 
 
@@ -17,16 +16,38 @@ const ScreenHome = () => {
   useEffect(()=>{
 
     const fetchPedido = async ()=>{
-      console.log("PRODUCTOOOOO:")
       const response = await fetch("http://localhost:8080/detalles/DTO")
       const data = await response.json()
-      console.log(data)
       setProductos(data)
-      console.log("estado ",productos)
   
     }
 
     fetchPedido()
+
+
+  },[])
+
+  
+
+  useEffect(()=>{
+
+    // try{
+      
+    // const fetchPediddo = async ()=>{
+      
+    //   const categoria:ICategoria = {
+    //     nombre:"gaga"
+    //   }
+
+    //   const url = "http://localhost:8080/categorias";
+    //   return axios.post(url, categoria,)}
+    // fetchPediddo()
+
+
+
+    // }catch(err){
+    //   console.log("ERROR CREAR: ",err)
+    // }
 
 
   },[])
@@ -77,9 +98,6 @@ const ScreenHome = () => {
         <div className={styles.featuredSection}>
           <h3 className={styles.featuredTitle}>Productos Destacados:</h3>
           <div className={styles.featuredProducts}>
-            <CardProducts products={productos}/>
-            <CardProducts products={productos}/>
-            <CardProducts products={productos}/>
             <CardProducts products={productos}/>
           </div>
         </div>

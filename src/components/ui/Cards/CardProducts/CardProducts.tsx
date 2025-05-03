@@ -1,17 +1,18 @@
 import styles from "./CardProducts.module.css";
 import { FC } from "react";
 import { IDetalleDTO } from "../../../../types/detalles/IDetalleDTO";
+import { useNavigate } from "react-router";
 
 interface IProps {
   products: IDetalleDTO[];
 }
 
-
 const CardProducts: FC<IProps> = ({ products }) => {
+  const navigate = useNavigate();
+  
   const handleNavigate = (id: number) => {
-    window.location.href = `/product/${id}`;
+    navigate(`/product/${id}`);
   };
-  console.log(products)
 
   return (
     <>
@@ -21,7 +22,7 @@ const CardProducts: FC<IProps> = ({ products }) => {
             <div className={styles.productImage}>
               {product.imagenPrincipal ? (
                 <img
-                  src={product.imagenPrincipal.url}
+                  src={product.imagenPrincipal.url || "Imagen del producto"}
                   alt={product.imagenPrincipal.alt || "Imagen del producto"}
                   onError={(e) => (e.currentTarget.src = "/fallback.jpg")}
                 />
@@ -34,14 +35,16 @@ const CardProducts: FC<IProps> = ({ products }) => {
               <div className={styles.productInfo}>
                 <p className={styles.productName}>{product.producto.nombre}</p>
                 <p className={styles.productPrice}>
-                  {product.precio ? `$${product.precio.precioCompra}` : "Sin precio"}
+                  {product.precio?.precioVenta
+                    ? `$${product.precio.precioVenta}`
+                    : "Sin precio"}
                 </p>
               </div>
 
               <div className={styles.productActions}>
                 <button
                   className={styles.productButton}
-                  onClick={() => handleNavigate(product.producto.id)}
+                  onClick={() => handleNavigate(product.id)}
                 >
                   Ver más
                 </button>

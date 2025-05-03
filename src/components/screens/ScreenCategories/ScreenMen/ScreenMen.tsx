@@ -1,12 +1,31 @@
-
 import Header from "../../../ui/Header/Header";
 import Footer from "../../../ui/Footer/Footer";
 import styles from "./ScreenMen.module.css";
 import CardProducts from "../../../ui/Cards/CardProducts/CardProducts";
 import SidebarFilter from "../../../ui/SidebarFilter/SidebarFilter";
 import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ServiceDetalle } from "../../../../services/serviceDetalle";
+import { IDetalleDTO } from "../../../../types/detalles/IDetalleDTO";
 
 const ScreenMen = () => {
+  const [productosHombre, setProductosHombre] = useState<IDetalleDTO[] | any>(
+    []
+  );
+  const detalleService = new ServiceDetalle();
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  const getProducts = async () => {
+    const productosHombre = await detalleService.getDetallesGeneroProduct(
+      "MASCULINO"
+    );
+
+    setProductosHombre(productosHombre);
+  };
+
   return (
     <>
       <div className={styles.screenMen}>
@@ -33,14 +52,13 @@ const ScreenMen = () => {
           </div>
           <div className={styles.productsSection}>
             <div className={styles.searchBar}>
-              <input type="search" placeholder="Buscar producto"  />
-              <Search/>
+              <input type="search" placeholder="Buscar producto" />
+              <Search />
             </div>
             <div className={styles.productCards}>
-              <CardProducts />
+              <CardProducts products={productosHombre} />
             </div>
           </div>
-
         </div>
 
         <Footer />
