@@ -1,20 +1,20 @@
 import { FC } from "react";
-import { IDetalleDTO } from "../../../../types/detalles/IDetalleDTO";
 import styles from "./CardAdmin.module.css";
+import { IDetalle } from "../../../../types/detalles/IDetalle";
 
 type IProps = {
-  producto: IDetalleDTO[];  // Cambié de 'producto' a 'productos'
-  onEdit: (producto: IDetalleDTO) => void;
+  producto: IDetalle[];
+  onEdit: (producto: IDetalle) => void;
 };
 
 const CardAdmin: FC<IProps> = ({ producto, onEdit }) => {
   return (
-    <div className={styles.gridContainer}>
-      {producto && producto.length > 0 ? (
+    <div className={styles.gridContainer}  >
+      {producto ? (
         producto.map((item) => (
-          <div className={styles.card}>
+          <div className={styles.card} key ={item.id}>
             <img
-              src={item.imagenPrincipal?.url}
+              src={item.imagenes && item.imagenes.length > 0 ? item.imagenes[0].url : 'default-image-url'}
               alt="Imagen del producto"
               className={styles.image}
             />
@@ -26,7 +26,9 @@ const CardAdmin: FC<IProps> = ({ producto, onEdit }) => {
             <p className={styles.meta}>
               Categoría: {item.producto?.categoria.nombre}
             </p>
-            <p className={styles.meta}>Género: {item.producto?.sexo}</p>
+            <p className={styles.meta}>
+              Género: {item.producto?.generoProducto}
+            </p>
             <p className={styles.meta}>Tipo: {item.producto?.tipoProducto}</p>
             <div className={styles.actions}>
               <button type="button" className={styles.deleteButton}>

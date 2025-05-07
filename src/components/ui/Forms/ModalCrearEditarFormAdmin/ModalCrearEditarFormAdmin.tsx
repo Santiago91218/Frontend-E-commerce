@@ -1,11 +1,13 @@
-import { FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
 import { IDetalleDTO } from "../../../../types/detalles/IDetalleDTO";
-import { Sexo, TipoProducto } from "../../../../types/IProducto";
+import {  GeneroProducto, TipoProducto } from "../../../../types/IProducto";
 import styles from "./ModalCrearEditarFormAdmin.module.css";
-import { addDetalle } from "../../../../http/api";
-import { IDetalle } from "../../../../types/detalles/IDetalle";
 
-// Estructura inicial de datos para la creación
+import { IDetalle } from "../../../../types/detalles/IDetalle";
+import { detalleStore } from "../../../../store/detalleStore";
+import { ServiceDetalle } from "../../../../services/serviceDetalle";
+
+
 const initialState: IDetalle = {
   id: 0,
   disponible: true,
@@ -17,6 +19,7 @@ const initialState: IDetalle = {
   stock: 0,
   producto: {
     id: 0,
+    generoProducto: GeneroProducto.MASCULINO,
     disponible: true,
     nombre: "",
     descripcion: "",
@@ -26,7 +29,7 @@ const initialState: IDetalle = {
       nombre: "",
     },
     tipoProducto: TipoProducto.REMERA,
-    sexo: Sexo.MASCULINO,
+  
   },
   estado: true,
   precio: {
@@ -46,7 +49,7 @@ const initialState: IDetalle = {
     {
       id: 0,
       disponible: true,
-      url: "",
+      url: "default-image-url",
       alt: "",
       detalle: {} as IDetalle,
     },
@@ -55,13 +58,78 @@ const initialState: IDetalle = {
 
 interface IProps {
   closeModal: () => void;
-  producto: IDetalleDTO | null;
+  producto: IDetalle | null;
 }
 
 const ModalCrearEditarFormAdmin: FC<IProps> = ({ closeModal, producto }) => {
-  // Inicializar el formulario con los datos del producto o el estado inicial
-  const [formData, setFormData] = useState<IDetalleDTO>(producto || initialState);
+  const [formData, setFormData] = useState<IDetalle>(initialState);
 
+  const serviceDetalle = new ServiceDetalle();
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+  
+    try {
+      if (producto) {
+        
+        await serviceDetalle.editarDetalle(formData.id, formData);
+        console.log("Producto editado con éxito");
+      } else {
+        
+        await serviceDetalle.crearDetalle(formData);
+        console.log("Producto creado con éxito");
+        window.location.reload();
+      }
+
+      closeModal();
+
+    } catch (error) {
+      console.error("Error al guardar el producto:", error);
+    }
+  };
+  
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => {
+      const updated = { ...prev };
+  
+      switch (name) {
+        case "producto.nombre":
+          updated.producto.nombre = value;
+          break;
+        case "producto.descripcion":
+          updated.producto.descripcion = value;
+          break;
+        case "precio.precioVenta":
+          updated.precio.precioVenta = parseFloat(value);
+          break;
+        case "producto.categoria.nombre":
+          updated.producto.categoria.nombre = value;
+          break;
+        case "producto.tipoProducto":
+          updated.producto.tipoProducto = value as TipoProducto;
+          break;
+        case "producto.generoProducto":
+          updated.producto.generoProducto = value as GeneroProducto;
+          break;
+        case "imagenes":
+          updated.imagenes[0].url = value;
+          break;
+        default:
+          break;
+      }
+      return updated;
+    });
+  };
+  useEffect(() => {
+    if (producto) {
+      setFormData(producto);
+    } else {
+      setFormData(initialState);
+    }
+  }, [producto]);
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
@@ -72,7 +140,7 @@ const ModalCrearEditarFormAdmin: FC<IProps> = ({ closeModal, producto }) => {
             <input
               type="text"
               name="producto.nombre"
-              value={formData?.producto?.nombre || ""}
+              value={formData.producto.nombre || ""}
               onChange={handleChange}
             />
           </label>
@@ -82,7 +150,7 @@ const ModalCrearEditarFormAdmin: FC<IProps> = ({ closeModal, producto }) => {
             <input
               type="text"
               name="producto.descripcion"
-              value={formData?.producto?.descripcion || ""}
+              value={formData.producto.descripcion || ""}
               onChange={handleChange}
             />
           </label>
@@ -92,7 +160,7 @@ const ModalCrearEditarFormAdmin: FC<IProps> = ({ closeModal, producto }) => {
             <input
               type="number"
               name="precio.precioVenta"
-              value={formData?.precio?.precioVenta || 0}
+              value={formData.precio.precioVenta || 0}
               onChange={handleChange}
             />
           </label>
@@ -102,7 +170,7 @@ const ModalCrearEditarFormAdmin: FC<IProps> = ({ closeModal, producto }) => {
             <input
               type="text"
               name="producto.categoria.nombre"
-              value={formData?.producto?.categoria?.nombre || ""}
+              value={formData.producto.categoria.nombre || ""}
               onChange={handleChange}
             />
           </label>
@@ -111,7 +179,7 @@ const ModalCrearEditarFormAdmin: FC<IProps> = ({ closeModal, producto }) => {
             <p>Tipo</p>
             <select
               name="producto.tipoProducto"
-              value={formData?.producto?.tipoProducto || ""}
+              value={formData.producto.tipoProducto || ""}
               onChange={handleChange}
             >
               <option value={TipoProducto.REMERA}>REMERA</option>
@@ -125,12 +193,13 @@ const ModalCrearEditarFormAdmin: FC<IProps> = ({ closeModal, producto }) => {
           <label>
             <p>Género</p>
             <select
-              name="producto.sexo"
-              value={formData?.producto?.sexo || ""}
+              name="producto.generoProducto"
+              value={formData.producto.generoProducto || ""}
               onChange={handleChange}
             >
-              <option value={Sexo.MASCULINO}>Masculino</option>
-              <option value={Sexo.FEMENINO}>Femenino</option>
+              <option value={GeneroProducto.MASCULINO}>Masculino</option>
+              <option value={GeneroProducto.FEMENINO}>Femenino</option>
+              <option value={GeneroProducto.INFANTIL}>Infantil</option>
             </select>
           </label>
 
@@ -139,7 +208,7 @@ const ModalCrearEditarFormAdmin: FC<IProps> = ({ closeModal, producto }) => {
             <input
               type="text"
               name="imagenes"
-              value={formData?.imagenPrincipal?.url || ""}
+              value={formData.imagenes && formData.imagenes.length > 0 ? formData.imagenes[0].url : ""}
               onChange={handleChange}
             />
           </label>

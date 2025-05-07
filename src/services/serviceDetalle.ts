@@ -33,4 +33,21 @@ export class ServiceDetalle {
     const response = await axios.get(url);
     return response.data;
   }
+
+  public async crearDetalle(detalle: any): Promise<AxiosResponse<any>> {
+    const url = `${this.baseURL}`;
+    const response = await axios.post(url, detalle);
+    return response.data;
+  }
+
+  public async editarDetalle(id: number, detalle: any): Promise<AxiosResponse<any>> {
+    const url = `${this.baseURL}/${id}`;
+    const response = await axios.put(url, detalle);
+    return response.data;
+  }
+
+  public async eliminarDetalle(id: number): Promise<void> {
+    const url = `${this.baseURL}/${id}`;
+    await axios.delete(url);
+  }
 }

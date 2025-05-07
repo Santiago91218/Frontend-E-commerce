@@ -58,9 +58,9 @@ margin-bottom: 20px;
 .featuredProducts{
     display: grid;
     grid-template-columns:repeat(4, 1fr);
-    gap: 35px;
-    margin: 0 auto; 
+    
 }
+
 
 .featuredTitle{
     margin-left: 20px;

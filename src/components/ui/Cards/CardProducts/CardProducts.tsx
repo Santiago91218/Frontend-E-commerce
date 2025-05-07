@@ -4,26 +4,30 @@ import { IDetalleDTO } from "../../../../types/detalles/IDetalleDTO";
 import { useNavigate } from "react-router";
 
 interface IProps {
-  products: IDetalleDTO[];
+  products: IDetalleDTO;
 }
 
 const CardProducts: FC<IProps> = ({ products }) => {
   const navigate = useNavigate();
   
+
+  if (!products || !products.producto) {
+    return <div>Producto no disponible</div>;
+  }
+
   const handleNavigate = (id: number) => {
     navigate(`/product/${id}`);
   };
 
   return (
     <>
-      {products && products.length > 0 ? (
-        products.map((product) => (
-          <div key={product.producto.id} className={styles.productCard}>
+      
+          <div className={styles.productCard}>
             <div className={styles.productImage}>
-              {product.imagenPrincipal ? (
+              {products.imagenPrincipal ? (
                 <img
-                  src={product.imagenPrincipal.url || "Imagen del producto"}
-                  alt={product.imagenPrincipal.alt || "Imagen del producto"}
+                  src={products.imagenPrincipal.url || "Imagen del producto"}
+                  alt={products.imagenPrincipal.alt || "Imagen del producto"}
                   onError={(e) => (e.currentTarget.src = "/fallback.jpg")}
                 />
               ) : (
@@ -33,10 +37,10 @@ const CardProducts: FC<IProps> = ({ products }) => {
 
             <div className={styles.productDetails}>
               <div className={styles.productInfo}>
-                <p className={styles.productName}>{product.producto.nombre}</p>
+                <p className={styles.productName}>{products.producto.nombre}</p>
                 <p className={styles.productPrice}>
-                  {product.precio?.precioVenta
-                    ? `$${product.precio.precioVenta}`
+                  {products.precio.precioVenta
+                    ? `$${products.precio.precioVenta}`
                     : "Sin precio"}
                 </p>
               </div>
@@ -44,17 +48,13 @@ const CardProducts: FC<IProps> = ({ products }) => {
               <div className={styles.productActions}>
                 <button
                   className={styles.productButton}
-                  onClick={() => handleNavigate(product.id)}
+                  onClick={() => handleNavigate(products.id)}
                 >
                   Ver más
                 </button>
               </div>
             </div>
           </div>
-        ))
-      ) : (
-        <div>No hay productos disponibles</div>
-      )}
     </>
   );
 };

@@ -1,0 +1,38 @@
+/* Ajusta el ancho y el comportamiento de los slides */
+.swiperContainer {
+    width: 100%;
+    overflow: hidden; /* Esto evita que los productos se desborden fuera del carrusel */
+  }
+  
+  .swiper-wrapper {
+    display: flex; /* Asegura que los productos se alineen horizontalmente */
+  }
+  
+  .swiperSlide {
+    width: 100%; /* Hace que cada slide ocupe todo el espacio disponible */
+    display: flex;
+    justify-content: center; /* Centra el producto dentro del slide */
+    padding: 10px; /* Espacio entre los productos */
+  }
+  
+  /* Específico para pantallas grandes */
+  @media screen and (min-width: 1024px) {
+    .swiperSlide {
+      width: 33%; /* Tres productos por fila */
+    }
+  }
+  
+  /* Específico para pantallas medianas */
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    .swiperSlide {
+      width: 50%; /* Dos productos por fila */
+    }
+  }
+  
+  /* Específico para pantallas pequeñas */
+  @media screen and (max-width: 767px) {
+    .swiperSlide {
+      width: 100%; /* Un producto por fila */
+    }
+  }
+  

@@ -14,10 +14,6 @@ const ScreenMen = () => {
   );
   const detalleService = new ServiceDetalle();
 
-  useEffect(() => {
-    getProducts();
-  }, []);
-
   const getProducts = async () => {
     const productosHombre = await detalleService.getDetallesGeneroProduct(
       "MASCULINO"
@@ -25,6 +21,10 @@ const ScreenMen = () => {
 
     setProductosHombre(productosHombre);
   };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   return (
     <>

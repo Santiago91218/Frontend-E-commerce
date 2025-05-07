@@ -4,6 +4,8 @@ import Footer from "../../ui/Footer/Footer";
 import Header from "../../ui/Header/Header";
 import styles from "./ScreenHome.module.css";
 import { IDetalleDTO } from "../../../types/detalles/IDetalleDTO";
+import ProductList from "../../ui/List/ProductList/ProductList";
+import ProductCarousel from "../../ui/Carousel/ProductCarousel/ProductCarousel";
 
 
 
@@ -98,10 +100,9 @@ const ScreenHome = () => {
         <div className={styles.featuredSection}>
           <h3 className={styles.featuredTitle}>Productos Destacados:</h3>
           <div className={styles.featuredProducts}>
-            <CardProducts products={productos}/>
+            <ProductCarousel products={productos} />
           </div>
         </div>
-
         <div className={styles.footerSection}>
           <Footer />
         </div>

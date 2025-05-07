@@ -71,7 +71,7 @@ const ScreenProductPage = () => {
         </div>
         <div className={styles.productDetail}>
           <div className={styles.secondaryImage}>
-            {producto.imagenes.map((img, index) => (
+            {producto.imagenes?.map((img, index) => (
               <img
                 key={index}
                 src={img.url}
