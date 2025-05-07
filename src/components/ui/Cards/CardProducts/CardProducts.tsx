@@ -48,7 +48,7 @@ const CardProducts: FC<IProps> = ({ products }) => {
               <div className={styles.productActions}>
                 <button
                   className={styles.productButton}
-                  onClick={() => handleNavigate(products.id)}
+                  onClick={() => handleNavigate(products.id!)}
                 >
                   Ver más
                 </button>

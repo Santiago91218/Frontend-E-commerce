@@ -53,7 +53,9 @@ const ScreenWomen = () => {
               <Search />
             </div>
             <div className={styles.productCards}>
-              <CardProducts products={productosMujer} />
+              {productosMujer.map((producto: IDetalleDTO) => (
+                <CardProducts key={producto.id} products={producto} />
+              ))}
             </div>
           </div>
         </div>

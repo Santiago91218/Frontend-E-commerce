@@ -5,8 +5,8 @@ import { ITalle } from "../ITalle";
 
 
 export interface IDetalle {
-  id: number;
-  disponible: boolean;
+  id?: number;
+  disponible?: boolean;
   talle: ITalle;
   stock: number;
   producto: IProducto;

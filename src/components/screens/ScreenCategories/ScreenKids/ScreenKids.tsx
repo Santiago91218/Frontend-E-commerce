@@ -55,7 +55,9 @@ const ScreenKids = () => {
               <Search />
             </div>
             <div className={styles.productCards}>
-              <CardProducts products={productosInfantil} />
+              {productosInfantil.map((producto: IDetalleDTO) => (
+                <CardProducts key={producto.id} products={producto} />
+              ))}
             </div>
           </div>
         </div>

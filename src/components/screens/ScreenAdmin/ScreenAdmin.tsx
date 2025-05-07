@@ -15,7 +15,7 @@ const ScreenAdmin = () => {
     const fetchPedido = async () => {
       const response = await fetch("http://localhost:8080/detalles/DTO");
       const data = await response.json();
-      setDetalle(data); 
+      setDetalle(data);
     };
     fetchPedido();
   }, []);
@@ -37,6 +37,12 @@ const ScreenAdmin = () => {
         <h1 className={styles.adminTitle}>Panel de Administración</h1>
         <button onClick={() => navigate("/home")} className={styles.backButton}>
           Volver a la tienda
+        </button>
+        <button
+          onClick={() => navigate("/admin/categorias")}
+          className={styles.backButton}
+        >
+          Categorias
         </button>
         <div className={styles.formSection}>
           <button onClick={() => handleOpenModal(null)}>Crear</button>
