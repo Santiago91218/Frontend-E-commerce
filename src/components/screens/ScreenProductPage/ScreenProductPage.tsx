@@ -48,12 +48,12 @@ const ScreenProductPage = () => {
 
     const tipo = producto.producto.tipoProducto;
     const genero = producto.producto.generoProducto;
-    const idDetalle = producto.id
+    const idDetalle = producto.id;
 
     const relacionados = await detalleService.getProductosRelacionados(
       tipo,
       genero,
-      idDetalle
+      idDetalle!
     );
 
     setProductoRelacionados(relacionados);
@@ -93,7 +93,9 @@ const ScreenProductPage = () => {
             ) : (
               <p>Precio no disponible</p>
             )}
-            <p>Descripcion: {producto.producto.descripcion || "No disponible"}</p>
+            <p>
+              Descripcion: {producto.producto.descripcion || "No disponible"}
+            </p>
 
             <div>
               <h3>Selecciona el talle</h3>
@@ -129,7 +131,9 @@ const ScreenProductPage = () => {
         <div className={styles.featuredSection}>
           <h3 className={styles.featuredTitle}>Productos Relacionados:</h3>
           <div className={styles.featuredProducts}>
-            <CardProducts products={productosRelacionados} />
+            {productosRelacionados?.map((producto: IDetalleDTO) => (
+              <CardProducts key={producto.id} products={producto} />
+            ))}
           </div>
         </div>
         <Footer />
