@@ -13,6 +13,15 @@ const ScreenKids = () => {
     IDetalleDTO[] | any
   >([]);
   const detalleService = new ServiceDetalle();
+  const [inputText, setInputText] = useState<string>("");
+
+  const productosFiltrados = productosInfantil.filter((producto: IDetalleDTO) =>
+    producto.producto.nombre.toLowerCase().includes(inputText.toLowerCase())
+  );
+
+  const handleChangeInputSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputText(e.target.value);
+  };
 
   useEffect(() => {
     getProducts();
@@ -51,11 +60,16 @@ const ScreenKids = () => {
           </div>
           <div className={styles.productsSection}>
             <div className={styles.searchBar}>
-              <input type="search" placeholder="Buscar producto" />
+              <input
+                onChange={handleChangeInputSearch}
+                value={inputText}
+                type="search"
+                placeholder="Buscar producto"
+              />
               <Search />
             </div>
             <div className={styles.productCards}>
-              {productosInfantil.map((producto: IDetalleDTO) => (
+              {productosFiltrados.map((producto: IDetalleDTO) => (
                 <CardProducts key={producto.id} products={producto} />
               ))}
             </div>

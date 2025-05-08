@@ -13,6 +13,15 @@ const ScreenMen = () => {
     []
   );
   const detalleService = new ServiceDetalle();
+  const [inputText, setInputText] = useState<string>("");
+
+  const productosFiltrados = productosHombre.filter((producto: IDetalleDTO) =>
+    producto.producto.nombre.toLowerCase().includes(inputText.toLowerCase())
+  );
+
+  const handleChangeInputSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputText(e.target.value);
+  };
 
   const getProducts = async () => {
     const productosHombre = await detalleService.getDetallesGeneroProduct(
@@ -52,11 +61,16 @@ const ScreenMen = () => {
           </div>
           <div className={styles.productsSection}>
             <div className={styles.searchBar}>
-              <input type="search" placeholder="Buscar producto" />
+              <input
+                value={inputText}
+                onChange={handleChangeInputSearch}
+                type="search"
+                placeholder="Buscar producto"
+              />
               <Search />
             </div>
             <div className={styles.productCards}>
-              {productosHombre.map((producto: IDetalleDTO) => (
+              {productosFiltrados.map((producto: IDetalleDTO) => (
                 <CardProducts key={producto.id} products={producto} />
               ))}
             </div>
