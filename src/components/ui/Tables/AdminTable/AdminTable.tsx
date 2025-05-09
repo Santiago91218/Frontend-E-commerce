@@ -30,6 +30,7 @@ export function AdminTable<T>({ data, onAdd, onEdit, onDelete, renderItem }: IAd
 							<button onClick={() => onEdit(item)}>
 								<LuPencil />
 							</button>
+							
 							<button onClick={() => onDelete(item)}>
 								<LuTrash2 />
 							</button>
