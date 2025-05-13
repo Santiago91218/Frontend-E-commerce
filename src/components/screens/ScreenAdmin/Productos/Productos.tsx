@@ -1,38 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Productos.module.css";
 
-import { GeneroProducto, IProducto, TipoProducto } from "../../../../types/IProducto";
+import { IProducto } from "../../../../types/IProducto";
 import { AdminTable } from "../../../ui/Tables/AdminTable/AdminTable";
 import ModalCrearEditarFormAdmin from "../../../ui/Forms/ModalCrearEditarProducto/ModalCrearEditarProducto";
-import { detalleStore } from "../../../../store/detalleStore";
-import CardAdmin from "../../../ui/Cards/CardAdmin/CardAdmin";
+import { ServiceProducto } from "../../../../services/productService";
 
 export const Productos = () => {
 	const [modalOpen, setModalOpen] = useState(false);
-	const detalle = detalleStore((state) => state.detalle);
-	const detalleActivo = detalleStore((state) => state.detalleActivo);
-	const [productos, setProductos] = useState<IProducto[]>([
-		{
-			id: 1,
-			disponible: true,
-			nombre: "Remera Oversize",
-			descripcion: "Remera de algodón ancha",
-			tipoProducto: TipoProducto.REMERA,
-			generoProducto: GeneroProducto.MASCULINO,
-			categoria: { id: 1, nombre: "Urbano", descripcion: "Ropa urbana moderna" },
-		},
-		{
-			id: 2,
-			disponible: true,
-			nombre: "Zapatillas Running",
-			descripcion: "Para correr largas distancias",
-			tipoProducto: TipoProducto.BUZO,
-			generoProducto: GeneroProducto.FEMENINO,
-			categoria: { id: 2, nombre: "Deportivo", descripcion: "Ropa para actividad física" },
-		},
-	]);
-
+	const [productos, setProductos] = useState<IProducto[]>([]);
 	const [productoActivo, setProductoActivo] = useState<IProducto | null>(null);
+
+    const productoService = new ServiceProducto();
+
+	useEffect(() => {
+		const fetchProductos = async () => {
+		  try {
+			const data = await productoService.getProductos();
+			setProductos(data);
+		  } catch (error) {
+			console.error("Error al cargar categorías", error);
+		  }
+		};
+		fetchProductos();
+	  }, []);
 
 	const handleAdd = () => {
 		setProductoActivo(null);
@@ -44,13 +35,35 @@ export const Productos = () => {
 		setModalOpen(true);
 	};
 
-	const handleDelete = (producto: IProducto) => {
-		setProductos((prev) => prev.filter((p) => p.id !== producto.id));
-	};
+	const handleDelete = async (producto: IProducto) => {
+		try {
+		  await productoService.eliminarProducto(producto.id);
+		  setProductos((prev) => prev.filter((c) => c.id !== producto.id));
+		} catch (error) {
+		  console.error("Error al eliminar categoría", error);
+		}
+	  };
 
 	const handleCloseModal = () => {
 		setModalOpen(false);
 	};
+
+const handleSubmit = async (producto: IProducto) => {
+	try {
+	  if (producto.id) {
+		await productoService.editarProducto(producto.id, producto);
+		setProductos((prev) =>
+		  prev.map((u) => (u.id === producto.id ? producto : u))
+		);
+	  } else {
+		const nuevoProducto = await productoService.crearProducto(producto);
+		setProductos((prev) => [...prev, nuevoProducto]);
+	  }
+	  setModalOpen(false);
+	} catch (error) {
+	  console.error("Error al guardar el Producto", error);
+	}
+  };
 
 	return (
 		<div className={styles.container}>
@@ -72,11 +85,11 @@ export const Productos = () => {
 					</div>
 				)}
 			/>
-
 			{modalOpen && (
 				<ModalCrearEditarFormAdmin
 					closeModal={handleCloseModal}
-					producto={detalleActivo}
+					onSubmit={handleSubmit}
+					producto={productoActivo}
 				/>
 			)}
 		</div>

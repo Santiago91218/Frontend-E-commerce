@@ -38,16 +38,7 @@ const ScreenAdmin = () => {
 		fetchPedido();
 	}, []);
 
-	const [isModalOpen, setIsModalOpen] = useState(false);
 
-	const handleOpenModal = (producto: IDetalle | null) => {
-		setDetalleActivo(producto);
-		setIsModalOpen(true);
-	};
-
-	const handleCloseModal = () => setIsModalOpen(false);
-
-	const navigate = useNavigate();
 
 	return (
 		<>

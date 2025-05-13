@@ -2,7 +2,7 @@ import { ICategoria } from "./ICategoria";
 
 export interface IProducto {
 	id: number;
-	disponible: boolean;
+	disponible?: boolean;
 	nombre: string;
 	tipoProducto: TipoProducto;
 	generoProducto: GeneroProducto;

@@ -1,243 +1,186 @@
-import { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
-import { GeneroProducto, TipoProducto } from "../../../../types/IProducto";
+import { FC, useEffect, useState } from "react";
+import {
+  GeneroProducto,
+  IProducto,
+  TipoProducto,
+} from "../../../../types/IProducto";
 import styles from "./ModalCrearEditarProducto.module.css";
-import { IDetalle } from "../../../../types/detalles/IDetalle";
-import { ServiceDetalle } from "../../../../services/serviceDetalle";
-
-const initialState: IDetalle = {
-	id: 0,
-	disponible: true,
-	talle: {
-		id: 0,
-		disponible: true,
-		talle: "",
-	},
-	stock: 0,
-	producto: {
-		id: 0,
-		generoProducto: GeneroProducto.MASCULINO,
-		disponible: true,
-		nombre: "",
-		descripcion: "",
-		categoria: {
-			id: 0,
-			disponible: true,
-			nombre: "",
-			descripcion: "",
-		},
-		tipoProducto: TipoProducto.REMERA,
-	},
-	estado: true,
-	precio: {
-		id: 0,
-		precioCompra: 0,
-		precioVenta: 0,
-		disponible: true,
-		descuento: {
-			id: 0,
-			disponible: true,
-			fechaInicio: "",
-			fechaFin: "",
-			descuento: 0,
-		},
-	},
-	imagenes: [
-		{
-			id: 0,
-			disponible: true,
-			url: "default-image-url",
-			alt: "",
-			detalle: {} as IDetalle,
-		},
-	],
-};
+import { ServiceCategoria } from "../../../../services/categoriaService";
+import { ICategoria } from "../../../../types/ICategoria"; // Asegúrate de importar ICategoria
 
 interface IProps {
-	closeModal: () => void;
-	producto: IDetalle | null;
+  closeModal: () => void;
+  producto?: IProducto | null;
+  onSubmit?: (producto: IProducto) => void;
 }
 
-const ModalCrearEditarProducto: FC<IProps> = ({ closeModal, producto }) => {
-	const [formData, setFormData] = useState<IDetalle>(initialState);
+const ModalCrearEditarProducto: FC<IProps> = ({ closeModal, producto, onSubmit }) => {
+  const [categorias, setCategorias] = useState<ICategoria[]>([]); // Estado para las categorías
+  const [formState, setFormState] = useState<Omit<IProducto, "id">>({
+    disponible: producto?.disponible ?? true,
+    nombre: producto?.nombre || "",
+    tipoProducto: producto?.tipoProducto || TipoProducto.REMERA,
+    generoProducto: producto?.generoProducto || GeneroProducto.MASCULINO,
+    categoria: producto?.categoria || { id: 0, nombre: "", descripcion: "" },
+    descripcion: producto?.descripcion || "",
+  });
 
-	const serviceDetalle = new ServiceDetalle();
+  useEffect(() => {
+    const fetchCategorias = async () => {
+      try {
+        const serviceCategoria = new ServiceCategoria();
+        const categoriasData = await serviceCategoria.getCategorias()
+        setCategorias(categoriasData); 
+      } catch (error) {
+        console.error("Error al cargar categorías", error);
+      }
+    };
 
-	useEffect(() => {
-		if (producto) {
-			setFormData(producto);
-		} else {
-			setFormData(initialState);
-		}
-	}, [producto]);
+    fetchCategorias(); 
+  }, []); 
 
-	const handleSubmit = async (e: FormEvent) => {
-		e.preventDefault();
-		try {
-			if (producto) {
-				await serviceDetalle.editarDetalle(formData.id!, formData);
-				console.log("Producto editado con éxito");
-			} else {
-				await serviceDetalle.crearDetalle(formData);
-				console.log("Producto creado con éxito");
-				window.location.reload();
-			}
-			closeModal();
-		} catch (error) {
-			console.error("Error al guardar el producto:", error);
-		}
-	};
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (producto?.id) {
+      onSubmit?.({ ...formState, id: producto.id });
+    } else {
+      const newProducto = { ...formState };
+      onSubmit?.(newProducto as IProducto);
+    }
+    closeModal();
+  };
 
-	const handleChange = (
-		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-	) => {
-		const { name, value } = e.target;
-		setFormData((prev) => {
-			const updated = { ...prev };
-			switch (name) {
-				case "producto.nombre":
-					updated.producto.nombre = value;
-					break;
-				case "producto.descripcion":
-					updated.producto.descripcion = value;
-					break;
-				case "precio.precioVenta":
-					updated.precio.precioVenta = parseFloat(value);
-					break;
-				case "producto.categoria.nombre":
-					updated.producto.categoria.nombre = value;
-					break;
-				case "producto.tipoProducto":
-					updated.producto.tipoProducto = value as TipoProducto;
-					break;
-				case "producto.generoProducto":
-					updated.producto.generoProducto = value as GeneroProducto;
-					break;
-				case "imagenes":
-					updated.imagenes[0].url = value;
-					break;
-			}
-			return updated;
-		});
-	};
+  const handleChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
 
-	return (
-		<div className={styles.overlay}>
-			<div className={styles.modal}>
-				<h2>{producto ? "Editar producto" : "Crear producto"}</h2>
-				<form
-					onSubmit={handleSubmit}
-					className={styles.form}
-				>
-					<div className={styles.formGroup}>
-						<label htmlFor="producto.nombre">Título</label>
-						<input
-							id="producto.nombre"
-							type="text"
-							name="producto.nombre"
-							value={formData.producto.nombre}
-							onChange={handleChange}
-							required
-						/>
-					</div>
+    if (name.includes(".")) {
+      const [parentKey, childKey] = name.split(".");
 
-					<div className={styles.formGroup}>
-						<label htmlFor="producto.descripcion">Descripción</label>
-						<textarea
-							id="producto.descripcion"
-							name="producto.descripcion"
-							value={formData.producto.descripcion}
-							onChange={handleChange}
-							required
-						/>
-					</div>
+      setFormState((prev) => {
+        const parentValue = prev[parentKey as keyof typeof prev];
 
-					<div className={styles.formGroup}>
-						<label htmlFor="precio.precioVenta">Precio</label>
-						<input
-							id="precio.precioVenta"
-							type="number"
-							name="precio.precioVenta"
-							value={formData.precio.precioVenta}
-							onChange={handleChange}
-							required
-						/>
-					</div>
+        if (typeof parentValue === "object" && parentValue !== null) {
+          return {
+            ...prev,
+            [parentKey]: {
+              ...parentValue,
+              [childKey]: value,
+            },
+          };
+        }
 
-					<div className={styles.formGroup}>
-						<label htmlFor="producto.categoria.nombre">Categoría</label>
-						<input
-							id="producto.categoria.nombre"
-							type="text"
-							name="producto.categoria.nombre"
-							value={formData.producto.categoria.nombre}
-							onChange={handleChange}
-							required
-						/>
-					</div>
+        return prev;
+      });
+    } else {
+      setFormState((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
 
-					<div className={styles.formGroup}>
-						<label htmlFor="producto.tipoProducto">Tipo</label>
-						<select
-							id="producto.tipoProducto"
-							name="producto.tipoProducto"
-							value={formData.producto.tipoProducto}
-							onChange={handleChange}
-							required
-						>
-							<option value={TipoProducto.REMERA}>Remera</option>
-							<option value={TipoProducto.ZAPATILLAS}>Zapatillas</option>
-							<option value={TipoProducto.BUZO}>Buzo</option>
-							<option value={TipoProducto.PANTALON}>Pantalón</option>
-							<option value={TipoProducto.CAMPERA}>Campera</option>
-						</select>
-					</div>
+  return (
+    <div className={styles.overlay}>
+      <div className={styles.modal}>
+        <h2>{producto ? "Editar producto" : "Crear producto"}</h2>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.formGroup}>
+            <label>Título</label>
+            <input
+              placeholder="Ingrese el nombre"
+              type="text"
+              name="nombre"
+              value={formState.nombre}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-					<div className={styles.formGroup}>
-						<label htmlFor="producto.generoProducto">Género</label>
-						<select
-							id="producto.generoProducto"
-							name="producto.generoProducto"
-							value={formData.producto.generoProducto}
-							onChange={handleChange}
-							required
-						>
-							<option value={GeneroProducto.MASCULINO}>Masculino</option>
-							<option value={GeneroProducto.FEMENINO}>Femenino</option>
-							<option value={GeneroProducto.INFANTIL}>Infantil</option>
-						</select>
-					</div>
+          <div className={styles.formGroup}>
+            <label>Descripción</label>
+            <textarea
+              placeholder="Ingrese una descripcion"
+              name="descripcion"
+              value={formState.descripcion}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-					<div className={styles.formGroup}>
-						<label htmlFor="imagenes">URL de imagen</label>
-						<input
-							id="imagenes"
-							type="text"
-							name="imagenes"
-							value={formData.imagenes?.[0]?.url || ""}
-							onChange={handleChange}
-							required
-						/>
-					</div>
+          <div className={styles.formGroup}>
+            <label>Categoría</label>
+            {/* El select de categorías */}
+            <select
+            
+              value={formState.categoria.id}
+              onChange={(e) => {
+                const id = Number(e.target.value);
+                const categoria = categorias.find((cat) => cat.id === id);
+                if (categoria) {
+                  setFormState((prev) => ({
+                    ...prev,
+                    categoria: categoria,
+                  }));
+                }
+              }}
+              required
+            >
+              {categorias.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
 
-					<div className={styles.buttonContainer}>
-						<button
-							type="submit"
-							className={styles.submitButton}
-						>
-							{producto ? "Guardar cambios" : "Crear producto"}
-						</button>
-						<button
-							type="button"
-							className={styles.cancelButton}
-							onClick={closeModal}
-						>
-							Cancelar
-						</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	);
+          <div className={styles.formGroup}>
+            <label>Tipo</label>
+            <select
+              name="tipoProducto"
+              value={formState.tipoProducto}
+              onChange={handleChange}
+              required
+            >
+              <option value={TipoProducto.REMERA}>Remera</option>
+              <option value={TipoProducto.ZAPATILLAS}>Zapatillas</option>
+              <option value={TipoProducto.BUZO}>Buzo</option>
+              <option value={TipoProducto.PANTALON}>Pantalón</option>
+              <option value={TipoProducto.CAMPERA}>Campera</option>
+            </select>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label>Género</label>
+            <select
+              name="generoProducto"
+              value={formState.generoProducto}
+              onChange={handleChange}
+              required
+            >
+              <option value={GeneroProducto.MASCULINO}>Masculino</option>
+              <option value={GeneroProducto.FEMENINO}>Femenino</option>
+              <option value={GeneroProducto.INFANTIL}>Infantil</option>
+            </select>
+          </div>
+
+          <div className={styles.buttonContainer}>
+            <button type="submit" className={styles.submitButton}>
+              {producto ? "Guardar cambios" : "Crear producto"}
+            </button>
+            <button
+              type="button"
+              className={styles.cancelButton}
+              onClick={closeModal}
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default ModalCrearEditarProducto;
