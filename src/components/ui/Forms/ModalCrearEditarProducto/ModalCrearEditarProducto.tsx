@@ -45,6 +45,7 @@ const ModalCrearEditarProducto: FC<IProps> = ({ closeModal, producto, onSubmit }
       onSubmit?.({ ...formState, id: producto.id });
     } else {
       const newProducto = { ...formState };
+      console.log(newProducto)
       onSubmit?.(newProducto as IProducto);
     }
     closeModal();
@@ -111,11 +112,12 @@ const ModalCrearEditarProducto: FC<IProps> = ({ closeModal, producto, onSubmit }
 
           <div className={styles.formGroup}>
             <label>Categoría</label>
-            {/* El select de categorías */}
+            
             <select
             
               value={formState.categoria.id}
               onChange={(e) => {
+                console.log(e.target)
                 const id = Number(e.target.value);
                 const categoria = categorias.find((cat) => cat.id === id);
                 if (categoria) {
@@ -127,6 +129,9 @@ const ModalCrearEditarProducto: FC<IProps> = ({ closeModal, producto, onSubmit }
               }}
               required
             >
+              <option disabled value={0}>
+                  {"Select categoria"}
+                </option>
               {categorias.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.nombre}

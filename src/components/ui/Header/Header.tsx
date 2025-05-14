@@ -38,7 +38,7 @@ const Header = () => {
 					<div onClick={() => handleNavigate("cart")}>
 						<ShoppingCart size={32} />
 					</div>
-					<div>
+					<div onClick={()=> handleNavigate("login")}>
 						<User size={32} />
 					</div>
 				</div>

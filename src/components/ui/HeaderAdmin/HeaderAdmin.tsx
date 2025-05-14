@@ -24,7 +24,7 @@ export const HeaderAdmin = () => {
 					<h2>Administrador</h2>
 				</div>
 				<div className={styles.iconsContainer}>
-					<div>
+					<div onClick={()=> handleNavigate("login")}>
 						<User size={32} />
 					</div>
 				</div>
