@@ -3,11 +3,39 @@ import Footer from "../../ui/Footer/Footer";
 import Header from "../../ui/Header/Header";
 import { Trash2 } from "lucide-react";
 import styles from "./ScreenCart.module.css";
+import { confirmarOrden } from "../../../services/ordenService";
 
 export const ScreenCart = () => {
-	const { productos, quitarProducto, cambiarCantidad } = useCartStore();
+	const { items, agregar, eliminar, vaciar, total } = useCartStore();
 
-	const totalCantidad = productos.reduce((acc, p) => acc + p.cantidad, 0);
+	const totalCantidad = items.reduce((acc, p) => acc + p.cantidad, 0);
+
+	const cambiarCantidad = (detalleId: number, nuevaCantidad: number) => {
+		const item = items.find((p) => p.detalleId === detalleId);
+		if (!item) return;
+		eliminar(detalleId);
+		agregar({ ...item, cantidad: nuevaCantidad });
+	};
+
+	const handleConfirmar = async () => {
+		try {
+			const orden = {
+				usuarioId: 1,
+				direccionEnvioId: 1,
+				total: total(),
+				detalles: items.map((i) => ({
+					productoId: i.detalleId,
+					cantidad: i.cantidad,
+				})),
+			};
+			await confirmarOrden(orden);
+			alert("Compra confirmada 🎉");
+			vaciar();
+		} catch (err) {
+			console.error("Error al confirmar compra:", err);
+			alert("Error al procesar la orden.");
+		}
+	};
 
 	return (
 		<div className={styles.contenedor}>
@@ -21,34 +49,25 @@ export const ScreenCart = () => {
 								? "Aún no hay productos en tu carrito"
 								: `Cantidad de productos: ${totalCantidad}`}
 						</h3>
-						{productos.map((producto) => (
+						{items.map((producto) => (
 							<div
-								key={producto.id}
+								key={producto.detalleId}
 								className={styles.cardProducto}
 							>
-								{/* //todo implementar imagenes */}
-								{/* Imagen del producto
-								{producto.imagen && (
-									<img
-										src={producto.imagen}
-										alt={producto.nombre}
-										className={styles.imagen}
-									/>
-								)} */}
 								<img
-									src="https://nikearprod.vtexassets.com/arquivos/ids/658418-800-800?width=800&height=800&aspect=true"
+									src={producto.imagen}
+									alt={producto.nombre}
 									className={styles.imagen}
-								></img>
+								/>
 								<div className={styles.detalles}>
 									<p className={styles.nombre}>{producto.nombre}</p>
-									{/* //todo implementar talle */}
-									<p className={styles.nombre}>Talle: {}</p>
+									<p className={styles.nombre}>Talle: 40</p>
 									<div className={styles.controlesCantidad}>
 										<p className={styles.nombre}>Cantidad: </p>
 										<button
 											onClick={() =>
 												cambiarCantidad(
-													producto.id,
+													producto.detalleId,
 													Math.max(1, producto.cantidad - 1)
 												)
 											}
@@ -61,7 +80,10 @@ export const ScreenCart = () => {
 										</span>
 										<button
 											onClick={() =>
-												cambiarCantidad(producto.id, producto.cantidad + 1)
+												cambiarCantidad(
+													producto.detalleId,
+													producto.cantidad + 1
+												)
 											}
 											className={styles.botonCantidad}
 										>
@@ -70,7 +92,7 @@ export const ScreenCart = () => {
 									</div>
 								</div>
 								<button
-									onClick={() => quitarProducto(producto.id)}
+									onClick={() => eliminar(producto.detalleId)}
 									className={styles.botonEliminar}
 								>
 									<Trash2 />
@@ -81,16 +103,19 @@ export const ScreenCart = () => {
 
 					<div className={styles.resumen}>
 						<h2 className={styles.resumenTitulo}>Resumen de la compra</h2>
-						{productos.map((p) => (
-							<p key={p.id}>
-								{/* //todo implementar precio del producto x la cantidad */}
-								{p.nombre} x {p.cantidad}
+						{items.map((p) => (
+							<p key={p.detalleId}>
+								{p.nombre} x {p.cantidad} = ${p.precio * p.cantidad}
 							</p>
 						))}
 						<hr className={styles.linea} />
-						{/* //todo implementar precio total */}
-						<p className={styles.total}>Total a pagar: {}</p>
-						<button className={styles.botonConfirmar}>Confirmar</button>
+						<p className={styles.total}>Total a pagar: ${total()}</p>
+						<button
+							className={styles.botonConfirmar}
+							onClick={handleConfirmar}
+						>
+							Confirmar
+						</button>
 					</div>
 				</div>
 			</main>
