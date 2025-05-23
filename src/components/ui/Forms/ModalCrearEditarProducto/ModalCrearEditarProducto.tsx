@@ -171,15 +171,15 @@ const ModalCrearEditarProducto: FC<IProps> = ({ closeModal, producto, onSubmit }
           </div>
 
           <div className={styles.buttonContainer}>
-            <button type="submit" className={styles.submitButton}>
-              {producto ? "Guardar cambios" : "Crear producto"}
-            </button>
             <button
               type="button"
               className={styles.cancelButton}
               onClick={closeModal}
             >
               Cancelar
+            </button>
+            <button  className={styles.submitButton} type="submit">
+              Confirmar
             </button>
           </div>
         </form>

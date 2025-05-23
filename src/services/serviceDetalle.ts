@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import { IDetalle } from "../types/detalles/IDetalle";
 const detalleService = import.meta.env.VITE_URL_DETALLE;
 
 export class ServiceDetalle {
@@ -33,6 +34,17 @@ export class ServiceDetalle {
     const response = await axios.get(url);
     return response.data;
   }
+
+  public async getDetallesPorProducto(productoId: number): Promise<IDetalle[]> {
+
+    const url = `${this.baseURL}/${productoId}/detalles`;
+
+    const response = await axios.get(url)
+
+    return response.data
+ 
+}
+
 
   public async crearDetalle(detalle: any): Promise<AxiosResponse<any>> {
     const url = `${this.baseURL}`;

@@ -6,8 +6,8 @@ import { loginService } from "../../../services/loginService";
 import { registerService } from "../../../services/registerService";
 import { useAuthStore } from "../../../store/useAuthStore";
 import { RolUsuario } from "../../../types/IUsuario";
-import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = yup.object({
 	nombre: yup.string().required("Nombre obligatorio"),

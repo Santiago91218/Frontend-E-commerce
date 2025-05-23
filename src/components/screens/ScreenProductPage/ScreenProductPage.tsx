@@ -22,6 +22,17 @@ const ScreenProductPage = () => {
     IDetalleDTO | any
   >();
   const detalleService = new ServiceDetalle();
+ const [detallesProducto, setDetallesProducto] = useState<IDetalle[] >(
+    []
+  );
+
+  useEffect(() => {
+    if (producto?.producto.id) {
+      getDetallesPorProducto();
+    }
+  }, [producto]);
+
+
 
   useEffect(() => {
     getProductsByID();
@@ -60,6 +71,18 @@ const ScreenProductPage = () => {
   };
   if (!producto)
     return <h2 style={{ textAlign: "center" }}>Cargando producto...</h2>;
+
+ 
+  const getDetallesPorProducto = async () => {
+    try {
+      const detalles = await detalleService.getDetallesPorProducto(
+        producto.producto.id
+      );
+      setDetallesProducto(detalles);
+    } catch (error) {
+      console.error("Error al obtener detalles del producto", error);
+    }
+  };
 
   return (
     <>
@@ -100,15 +123,17 @@ const ScreenProductPage = () => {
             <div>
               <h3>Selecciona el talle</h3>
               <div className={styles.sizeGrid}>
-                {[36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46].map((size) => (
+                {detallesProducto.map((detalle) => (
                   <button
-                    key={size}
+                    key={detalle.id}
                     className={`${styles.sizeButton} ${
-                      talleSeleccionado === size ? styles.selected : ""
+                      talleSeleccionado === detalle.talle.id
+                        ? styles.selected
+                        : ""
                     }`}
-                    onClick={() => setTalleSeleccionado(size)}
+                    onClick={() => setTalleSeleccionado(detalle.talle.id)}
                   >
-                    {size}
+                    {detalle.talle.talle}
                   </button>
                 ))}
               </div>

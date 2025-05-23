@@ -61,8 +61,8 @@ export const ModalCrearEditarCategoria: FC<IProps> = ({
             placeholder="Descripcion"
           ></textarea>
           <div className={styles.buttonContainer}>
-            <button onClick={closeModal}>Cancelar</button>
-            <button type="submit">Confirmar</button>
+            <button className={styles.cancelButton} onClick={closeModal}>Cancelar</button>
+            <button className={styles.submitButton} type="submit">Confirmar</button>
           </div>
         </form>
       </div>

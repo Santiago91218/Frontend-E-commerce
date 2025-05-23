@@ -69,13 +69,14 @@ export const ModalCrearEditarUsuario: FC<IProps> = ({ usuario, closeModal, onSub
 					</select>
 
 					<div className={styles.actions}>
-						<button type="submit">Guardar</button>
 						<button
+							className={styles.cancelButton}
 							type="button"
 							onClick={closeModal}
 						>
 							Cancelar
 						</button>
+						<button  className={styles.submitButton} type="submit">Confirmar</button>
 					</div>
 				</form>
 			</div>

@@ -41,3 +41,32 @@
 	display: flex;
 	justify-content: space-between;
 }
+
+.submitButton {
+	background-color: #007bff;
+	color: #fff;
+	padding: 0.6rem 1.2rem;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.submitButton:hover {
+	background-color: #0056b3;
+}
+
+.cancelButton {
+	background-color: #f44336;
+	color: #fff;
+	padding: 0.6rem 1.2rem;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.cancelButton:hover {
+	background-color: #d32f2f;
+}
+
