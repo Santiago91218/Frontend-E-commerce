@@ -8,6 +8,7 @@ function App() {
 
 	useEffect(() => {
 		loadFromStorage();
+		console.log("Usuario cargado:", useAuthStore.getState().usuario);
 	}, []);
 
 	return (

@@ -1,7 +1,7 @@
 import { ShoppingCart, User, LogOut } from "lucide-react";
 import styles from "./Header.module.css";
 import logo from "../../assets/Logo.png";
-import { useNavigate } from "react-router";
+import {  useNavigate } from "react-router";
 import { useAuthStore } from "../../../store/useAuthStore";
 
 const Header = () => {
@@ -17,6 +17,16 @@ const Header = () => {
 		logout();
 		navigate("/home");
 	};
+
+	const handleClikUserButton =()=>{
+
+		if(usuario){
+		handleNavigate("user")
+
+		}else{
+			handleNavigate("login")
+		}
+	}
 
 	return (
 		<div className={styles.headerContainer}>
@@ -61,7 +71,7 @@ const Header = () => {
 						/>
 					</div>
 				) : (
-					<div onClick={() => handleNavigate("login")}>
+					<div onClick={() => handleClikUserButton()}>
 						<User size={32} />
 					</div>
 				)}

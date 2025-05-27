@@ -22,17 +22,15 @@ const ScreenProductPage = () => {
     IDetalleDTO | any
   >();
   const detalleService = new ServiceDetalle();
- const [detallesProducto, setDetallesProducto] = useState<IDetalle[] >(
-    []
-  );
+
+  //State detalles por producto
+  const [detallesProducto, setDetallesProducto] = useState<IDetalle[]>([]);
 
   useEffect(() => {
     if (producto?.producto.id) {
       getDetallesPorProducto();
     }
   }, [producto]);
-
-
 
   useEffect(() => {
     getProductsByID();
@@ -72,7 +70,7 @@ const ScreenProductPage = () => {
   if (!producto)
     return <h2 style={{ textAlign: "center" }}>Cargando producto...</h2>;
 
- 
+  //Obtener detalles por producto
   const getDetallesPorProducto = async () => {
     try {
       const detalles = await detalleService.getDetallesPorProducto(
@@ -131,7 +129,13 @@ const ScreenProductPage = () => {
                         ? styles.selected
                         : ""
                     }`}
-                    onClick={() => setTalleSeleccionado(detalle.talle.id)}
+                    onClick={() => {
+                      setTalleSeleccionado(detalle.talle.id);
+                      setProducto(detalle); // Esto cambia todo el producto que estamos viendo (imagen, precio, stock)
+                      if (detalle.imagenes.length > 0) {
+                        setMainImage(detalle.imagenes[0].url);
+                      }
+                    }}
                   >
                     {detalle.talle.talle}
                   </button>

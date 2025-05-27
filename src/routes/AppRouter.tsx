@@ -7,6 +7,7 @@ import ScreenKids from "../components/screens/ScreenCategories/ScreenKids/Screen
 import ScreenLoginSignup from "../components/screens/ScreenLoginSignup/ScreenLoginSignup";
 import { ScreenCart } from "../components/screens/ScreenCart/ScreenCart";
 import ScreenAdmin from "../components/screens/ScreenAdmin/ScreenAdmin";
+import { ScreenUser } from "../components/screens/ScreenUser/ScreenUser";
 
 const AppRouter = () => {
   return (
@@ -14,6 +15,7 @@ const AppRouter = () => {
       <Route path="/" element={<Navigate to="home" />} />
       <Route path="/home" element={<ScreenHome />} />
       <Route path="/login" element={<ScreenLoginSignup />} />
+      <Route path="/user" element={<ScreenUser />} />
       <Route path="/product/:id" element={<ScreenProductPage />} />
       <Route path="/admin" element={<ScreenAdmin />} />
       <Route path="/hombre" element={<ScreenMen />} />
