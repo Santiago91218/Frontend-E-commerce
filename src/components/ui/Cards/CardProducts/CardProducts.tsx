@@ -2,6 +2,7 @@ import styles from "./CardProducts.module.css";
 import { FC } from "react";
 import { IDetalleDTO } from "../../../../types/detalles/IDetalleDTO";
 import { useNavigate } from "react-router";
+import { IDescuento } from "../../../../types/IDescuento";
 
 interface IProps {
   products: IDetalleDTO;
@@ -9,52 +10,90 @@ interface IProps {
 
 const CardProducts: FC<IProps> = ({ products }) => {
   const navigate = useNavigate();
-  
 
-  if (!products || !products.producto) {
-    return <div>Producto no disponible</div>;
-  }
+  const isDescuentoActivo = (descuento: IDescuento | undefined): boolean => {
+    if (!descuento) return false;
+
+    const hoy = new Date(); 
+    const fechaInicio = new Date(descuento.fechaInicio);
+    const fechaFin = new Date(descuento.fechaFin);
+
+    return hoy >= fechaInicio && hoy <= fechaFin;
+  };
+
+  const descuentoActivo = isDescuentoActivo(products.precio.descuento);
 
   const handleNavigate = (id: number) => {
     navigate(`/product/${id}`);
   };
-
+  
+  const calcularDescuento = (
+    precioVenta: number,
+    porcentajeDescuento: number
+  ) => {
+    if (porcentajeDescuento <= 0) {
+      return precioVenta;
+    }
+    return precioVenta - precioVenta * (porcentajeDescuento / 100);
+  };
+  
+  if (!products || !products.producto) {
+    return <div>Producto no disponible</div>;
+  }
   return (
     <>
-      
-          <div className={styles.productCard}>
-            <div className={styles.productImage}>
-              {products.imagenPrincipal ? (
-                <img
-                  src={products.imagenPrincipal.url || "Imagen del producto"}
-                  alt={products.imagenPrincipal.alt || "Imagen del producto"}
-                  onError={(e) => (e.currentTarget.src = "/fallback.jpg")}
-                />
+      <div className={styles.productCard}>
+        <div className={styles.productImage}>
+          {descuentoActivo && (
+            <div className={styles.divDescuento}>
+              <p>- {products.precio.descuento.descuento}%</p>
+            </div>
+          )}
+
+          {products.imagenPrincipal ? (
+            <img
+              src={products.imagenPrincipal.url || "Imagen del producto"}
+              alt={products.imagenPrincipal.alt || "Imagen del producto"}
+              onError={(e) => (e.currentTarget.src = "/fallback.jpg")}
+            />
+          ) : (
+            <div className={styles.imagePlaceholder}>Sin imagen</div>
+          )}
+        </div>
+
+        <div className={styles.productDetails}>
+          <div className={styles.productInfo}>
+            <p className={styles.productName}>{products.producto.nombre}</p>
+            <p className={styles.productPrice}>
+              {descuentoActivo ? (
+                <>
+                  <span className={styles.precioTachado}>
+                    ${products.precio.precioVenta}
+                  </span>
+                  <span className={styles.totalDescuento}>
+                    $
+                    {calcularDescuento(
+                      products.precio.precioVenta,
+                      products.precio.descuento.descuento
+                    )}
+                  </span>
+                </>
               ) : (
-                <div className={styles.imagePlaceholder}>Sin imagen</div>
+                <>${products.precio.precioVenta}</>
               )}
-            </div>
-
-            <div className={styles.productDetails}>
-              <div className={styles.productInfo}>
-                <p className={styles.productName}>{products.producto.nombre}</p>
-                <p className={styles.productPrice}>
-                  {products.precio.precioVenta
-                    ? `$${products.precio.precioVenta}`
-                    : "Sin precio"}
-                </p>
-              </div>
-
-              <div className={styles.productActions}>
-                <button
-                  className={styles.productButton}
-                  onClick={() => handleNavigate(products.id!)}
-                >
-                  Ver más
-                </button>
-              </div>
-            </div>
+            </p>
           </div>
+
+          <div className={styles.productActions}>
+            <button
+              className={styles.productButton}
+              onClick={() => handleNavigate(products.id!)}
+            >
+              Ver más
+            </button>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
