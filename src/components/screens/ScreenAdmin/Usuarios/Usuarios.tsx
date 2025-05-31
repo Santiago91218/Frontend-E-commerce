@@ -1,87 +1,109 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Usuarios.module.css";
-import { IUsuario, RolUsuario } from "../../../../types/IUsuario";
+import { IUsuario } from "../../../../types/IUsuario";
 import { AdminTable } from "../../../ui/Tables/AdminTable/AdminTable";
 import { ModalCrearEditarUsuario } from "../../../ui/Forms/ModalCrearEditarUsuario/ModalCrearEditarUsuario";
+import { ServiceUsuario } from "../../../../services/usuarioService";
+import Swal from "sweetalert2";
 
 export const Usuarios = () => {
-	const [modalOpen, setModalOpen] = useState(false);
-	const [usuarios, setUsuarios] = useState<IUsuario[]>([
-		{
-			id: 1,
-			nombre: "Carlos",
-			apellido: "Pérez",
-			email: "carlos@mail.com",
-			rol: RolUsuario.ADMIN,
-		},
-		{
-			id: 2,
-			nombre: "Lucía",
-			apellido: "Gómez",
-			email: "lucia@mail.com",
-			rol: RolUsuario.EMPLEADO,
-		},
-	]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [usuarios, setUsuarios] = useState<IUsuario[]>([]);
+  const [usuarioActivo, setUsuarioActivo] = useState<IUsuario | null>(null);
+  const usuarioService = new ServiceUsuario();
 
-	const [usuarioActivo, setUsuarioActivo] = useState<IUsuario | null>(null);
+  useEffect(() => {
+    const fetchUsuarios = async () => {
+      try {
+        const data = await usuarioService.getUsuarios();
+        setUsuarios(data);
+      } catch (error) {
+        console.error("Error al cargar usuarios", error);
+      }
+    };
+    fetchUsuarios();
+  }, []);
 
-	const handleAdd = () => {
-		setUsuarioActivo(null);
-		setModalOpen(true);
-	};
+  const handleAdd = () => {
+    setUsuarioActivo(null);
+    setModalOpen(true);
+  };
 
-	const handleEdit = (usuario: IUsuario) => {
-		setUsuarioActivo(usuario);
-		setModalOpen(true);
-	};
+  const handleEdit = (usuario: IUsuario) => {
+    setUsuarioActivo(usuario);
+    setModalOpen(true);
+  };
 
-	const handleDelete = (usuario: IUsuario) => {
-		setUsuarios((prev) => prev.filter((u) => u.id !== usuario.id));
-	};
+ const handleDelete = async (usuario: IUsuario) => {
+  try {
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción no se puede revertir",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, eliminar",
+    });
 
-	const handleCloseModal = () => {
-		setModalOpen(false);
-	};
-
-	const handleSubmit = (usuario: IUsuario) => {
-		setUsuarios((prev) => {
-			const existe = prev.some((u) => u.id === usuario.id);
-			if (existe) {
-				return prev.map((u) => (u.id === usuario.id ? usuario : u));
-			} else {
-				return [...prev, usuario];
-			}
+    if (result.isConfirmed) {
+      await usuarioService.eliminarUsuario(usuario.id);
+      Swal.fire({
+		  title: "¡Eliminado!",
+		  icon: "success",
 		});
-		setModalOpen(false);
-	};
+    }
+	setUsuarios((prev) => prev.filter((u) => u.id !== usuario.id));
+  } catch (error) {
+    console.error("Error al eliminar usuario", error);
+  }
+};
 
-	return (
-		<div className={styles.container}>
-			<AdminTable<IUsuario>
-				data={usuarios}
-				onAdd={handleAdd}
-				onEdit={handleEdit}
-				onDelete={handleDelete}
-				renderItem={(usuario) => (
-					<div>
-						<p>
-							<strong>
-								{usuario.nombre} {usuario.apellido}
-							</strong>
-						</p>
-						<p>{usuario.email}</p>
-						<p>Rol: {usuario.rol}</p>
-					</div>
-				)}
-			/>
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
 
-			{modalOpen && (
-				<ModalCrearEditarUsuario
-					usuario={usuarioActivo}
-					closeModal={handleCloseModal}
-					onSubmit={handleSubmit}
-				/>
-			)}
-		</div>
-	);
+  const handleSubmit = async (usuario: IUsuario) => {
+    try {
+      if (usuario.id) {
+        await usuarioService.editarUsuario(usuario.id, usuario);
+        setUsuarios((prev) =>
+          prev.map((u) => (u.id === usuario.id ? usuario : u))
+        );
+      } else {
+        const nuevoUsuario = await usuarioService.crearUsuario(usuario);
+        setUsuarios((prev) => [...prev, nuevoUsuario]);
+      }
+      setModalOpen(false);
+    } catch (error) {
+      console.error("Error al guardar usuario", error);
+    }
+  };
+
+  return (
+    <div className={styles.container}>
+      <AdminTable<IUsuario>
+        data={usuarios}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        renderItem={(usuario) => (
+          <div className={styles.item}>
+            <p>
+              <strong>Nombre:</strong> {usuario.nombre}
+            </p>
+            <p><strong>Email:</strong> {usuario.email}</p>
+            <p><strong>Rol:</strong> {usuario.rol}</p>
+          </div>
+        )}
+      />
+
+      {modalOpen && (
+        <ModalCrearEditarUsuario
+          usuario={usuarioActivo}
+          closeModal={handleCloseModal}
+          onSubmit={handleSubmit}
+        />
+      )}
+    </div>
+  );
 };

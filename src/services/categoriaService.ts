@@ -9,15 +9,27 @@ export class ServiceCategoria {
     this.baseURL = categoriaService;
   }
 
+   private getAuthHeaders() {
+    const token = localStorage.getItem("token");
+    return {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+  }
+
   public async getCategorias(): Promise<ICategoria[]> {
     const url = `${this.baseURL}`;
-    const response: AxiosResponse<ICategoria[]> = await axios.get(url);
+    const response: AxiosResponse<ICategoria[]> = await axios.get(url,{
+      headers: this.getAuthHeaders(),
+    });
     return response.data;
   }
 
   public async getCategoriaById(id: number): Promise<ICategoria> {
     const url = `${this.baseURL}/${id}`;
-    const response: AxiosResponse<ICategoria> = await axios.get(url);
+    const response: AxiosResponse<ICategoria> = await axios.get(url,{
+      headers: this.getAuthHeaders(),
+    });
     return response.data;
   }
 
@@ -29,7 +41,9 @@ export class ServiceCategoria {
     console.log("Datos que se envían:", categoria);
     const response: AxiosResponse<ICategoria> = await axios.post(
       url,
-      categoria
+      categoria,{
+      headers: this.getAuthHeaders(),
+    }
     );
     return response.data;
   }
@@ -39,12 +53,16 @@ export class ServiceCategoria {
     categoria: ICategoria
   ): Promise<ICategoria> {
     const url = `${this.baseURL}/${id}`;
-    const response: AxiosResponse<ICategoria> = await axios.put(url, categoria);
+    const response: AxiosResponse<ICategoria> = await axios.put(url, categoria,{
+      headers: this.getAuthHeaders(),
+    });
     return response.data;
   }
 
   public async eliminarCategoria(id: number): Promise<void> {
     const url = `${this.baseURL}/${id}`;
-    await axios.delete(url);
+    await axios.delete(url,{
+      headers: this.getAuthHeaders(),
+    });
   }
 }

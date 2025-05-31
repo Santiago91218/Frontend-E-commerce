@@ -10,15 +10,27 @@ export class ServiceProducto {
     this.baseURL = productoService;
   }
 
+  private getAuthHeaders() {
+    const token = localStorage.getItem("token");
+    return {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+  }
+
   public async getProductos(): Promise<IProducto[]> {
     const url = `${this.baseURL}`;
-    const response: AxiosResponse<IProducto[]> = await axios.get(url);
+    const response: AxiosResponse<IProducto[]> = await axios.get(url, {
+      headers: this.getAuthHeaders(),
+    });
     return response.data;
   }
 
   public async getProductoById(id: number): Promise<IProducto> {
     const url = `${this.baseURL}/${id}`;
-    const response: AxiosResponse<IProducto> = await axios.get(url);
+    const response: AxiosResponse<IProducto> = await axios.get(url, {
+      headers: this.getAuthHeaders(),
+    });
     return response.data;
   }
 
@@ -28,7 +40,9 @@ export class ServiceProducto {
       producto.id = Date.now();
     }
     console.log("Datos que se envían:", producto);
-    const response: AxiosResponse<IProducto> = await axios.post(url, producto);
+    const response: AxiosResponse<IProducto> = await axios.post(url, producto, {
+      headers: this.getAuthHeaders(),
+    });
     return response.data;
   }
 
@@ -37,12 +51,16 @@ export class ServiceProducto {
     producto: IProducto
   ): Promise<IProducto> {
     const url = `${this.baseURL}/${id}`;
-    const response: AxiosResponse<IProducto> = await axios.put(url, producto);
+    const response: AxiosResponse<IProducto> = await axios.put(url, producto, {
+      headers: this.getAuthHeaders(),
+    });
     return response.data;
   }
 
   public async eliminarProducto(id: number): Promise<void> {
     const url = `${this.baseURL}/${id}`;
-    await axios.delete(url);
+    await axios.delete(url, {
+      headers: this.getAuthHeaders(),
+    });
   }
 }

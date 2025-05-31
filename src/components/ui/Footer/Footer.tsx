@@ -2,13 +2,17 @@ import { Facebook, Instagram, Lock, Twitter } from "lucide-react";
 import logo from "../../assets/Logo.png";
 import styles from "./Footer.module.css";
 import { useNavigate } from "react-router";
-
+import { IUsuario } from "../../../types/IUsuario";
 
 const Footer = () => {
-  const navigate = useNavigate()
-  const handleNavigate= () => {
+  const navigate = useNavigate();
+  const handleNavigate = () => {
     navigate(`/admin`);
   };
+
+  const usuarioJson = localStorage.getItem("usuario");
+  const usuario: IUsuario = usuarioJson ? JSON.parse(usuarioJson) : null;
+
   return (
     <>
       <footer className={styles.footer}>
@@ -27,13 +31,14 @@ const Footer = () => {
             <Instagram />
             <Twitter />
             <Facebook />
-            <Lock onClick={handleNavigate}/>
+            {usuario?.rol === "ADMINISTRADOR" && (
+              <Lock onClick={handleNavigate} />
+            )}
           </div>
         </div>
         <div className={styles.footerCopy}>
           © 2025 Lookz. Todos los derechos reservados.
         </div>
-
       </footer>
     </>
   );

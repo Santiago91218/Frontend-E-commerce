@@ -4,7 +4,7 @@ import { LuPencil, LuPlus, LuTrash2 } from "react-icons/lu";
 
 export interface IAdminTableProps<T> {
   data: T[];
-  onAdd: () => void;
+  onAdd?: () => void;
   onEdit: (item: T) => void;
   onDelete: (item: T) => void;
   renderItem: (item: T) => ReactNode;
@@ -19,9 +19,12 @@ export function AdminTable<T>({
 }: IAdminTableProps<T>) {
   return (
     <div className={styles.container}>
+      {onAdd &&(
       <button className={styles.addButton} onClick={onAdd}>
         <LuPlus />
       </button>
+      )
+      }
       <div className={styles.table}>
         {Array.isArray(data) && data.length > 0 && (
           <>

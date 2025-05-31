@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router";
+import { Navigate, Route, Routes, useLocation } from "react-router";
 import ScreenHome from "../components/screens/ScreenHome/ScreenHome";
 import ScreenProductPage from "../components/screens/ScreenProductPage/ScreenProductPage";
 import ScreenMen from "../components/screens/ScreenCategories/ScreenMen/ScreenMen";
@@ -10,6 +10,15 @@ import ScreenAdmin from "../components/screens/ScreenAdmin/ScreenAdmin";
 import { ScreenUser } from "../components/screens/ScreenUser/ScreenUser";
 
 const AppRouter = () => {
+  const userLogueado = localStorage.getItem("token");
+
+  const location = useLocation(); //Vemos en que URL estamos actualmente
+  const isLoginPath = location.pathname === "/login"; // Verificamos si estamos en el /login
+
+  if (!userLogueado && !isLoginPath) {
+    return <Navigate to="/login" replace />;
+  }
+
   return (
     <Routes>
       <Route path="/" element={<Navigate to="home" />} />

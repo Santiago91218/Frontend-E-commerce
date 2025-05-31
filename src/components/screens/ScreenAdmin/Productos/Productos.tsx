@@ -73,15 +73,14 @@ const handleSubmit = async (producto: IProducto) => {
 				onEdit={handleEdit}
 				onDelete={handleDelete}
 				renderItem={(producto) => (
-					<div>
+					<div className={styles.item}>
 						<p>
 							<strong>{producto.nombre}</strong>
 						</p>
-						<p>{producto.descripcion}</p>
 						<p>
-							{producto.tipoProducto} | {producto.generoProducto}
+							{producto.tipoProducto} | {producto.generoProducto} | Categoría: {producto.categoria.nombre}
 						</p>
-						<p>Categoría: {producto.categoria.nombre}</p>
+	
 					</div>
 				)}
 			/>

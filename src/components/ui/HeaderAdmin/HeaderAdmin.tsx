@@ -1,4 +1,4 @@
-import { ShoppingCart, User } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import styles from "./HeaderAdmin.module.css";
 import logo from "../../assets/Logo.png";
 import { useNavigate } from "react-router";
@@ -24,8 +24,8 @@ export const HeaderAdmin = () => {
 					<h2>Administrador</h2>
 				</div>
 				<div className={styles.iconsContainer}>
-					<div onClick={()=> handleNavigate("login")}>
-						<User size={32} />
+					<div onClick={()=> handleNavigate("home")}>
+						<ArrowLeft size={32}/>
 					</div>
 				</div>
 			</div>

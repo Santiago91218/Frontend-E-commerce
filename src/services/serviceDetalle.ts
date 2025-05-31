@@ -9,9 +9,19 @@ export class ServiceDetalle {
     this.baseURL = detalleService;
   }
 
+  private getAuthHeaders() {
+    const token = localStorage.getItem("token");
+    return {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+  }
+
   public async getDetalleById(idDetalle: number) {
     const url = `${this.baseURL}/${idDetalle}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url,{
+      headers: this.getAuthHeaders(),
+    });
 
     return response.data;
   }
@@ -20,7 +30,9 @@ export class ServiceDetalle {
     generoProduct: string
   ): Promise<AxiosResponse<any>> {
     const url = `${this.baseURL}/genero-producto?generoProducto=${generoProduct}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url,{
+      headers: this.getAuthHeaders(),
+    });
 
     return response.data;
   }
@@ -31,35 +43,44 @@ export class ServiceDetalle {
     id: number
   ): Promise<AxiosResponse<any>> {
     const url = `${this.baseURL}/relacionados?tipo=${tipoProducto}&genero=${generoProduct}&id=${id}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url,{
+      headers: this.getAuthHeaders(),
+    });
     return response.data;
   }
 
   public async getDetallesPorProducto(productoId: number): Promise<IDetalle[]> {
-
     const url = `${this.baseURL}/${productoId}/detalles`;
+    const response = await axios.get(url,{
+      headers: this.getAuthHeaders(),
+    });
 
-    const response = await axios.get(url)
-
-    return response.data
- 
-}
-
-
-  public async crearDetalle(detalle: any): Promise<AxiosResponse<any>> {
-    const url = `${this.baseURL}`;
-    const response = await axios.post(url, detalle);
     return response.data;
   }
 
-  public async editarDetalle(id: number, detalle: any): Promise<AxiosResponse<any>> {
+  public async crearDetalle(detalle: any): Promise<AxiosResponse<any>> {
+    const url = `${this.baseURL}`;
+    const response = await axios.post(url, detalle,{
+      headers: this.getAuthHeaders(),
+    });
+    return response.data;
+  }
+
+  public async editarDetalle(
+    id: number,
+    detalle: any
+  ): Promise<AxiosResponse<any>> {
     const url = `${this.baseURL}/${id}`;
-    const response = await axios.put(url, detalle);
+    const response = await axios.put(url, detalle,{
+      headers: this.getAuthHeaders(),
+    });
     return response.data;
   }
 
   public async eliminarDetalle(id: number): Promise<void> {
     const url = `${this.baseURL}/${id}`;
-    await axios.delete(url);
+    await axios.delete(url,{
+      headers: this.getAuthHeaders(),
+    });
   }
 }

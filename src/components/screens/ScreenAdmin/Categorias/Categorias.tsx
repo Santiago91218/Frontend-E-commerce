@@ -72,7 +72,7 @@ export const Categorias = () => {
         onAdd={handleAdd}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        renderItem={(cat) => <p>Nombre: {cat.nombre}</p>}
+        renderItem={(cat) => <p> <strong>Nombre:</strong> {cat.nombre}</p>}
       />
 
       {modalOpen && (

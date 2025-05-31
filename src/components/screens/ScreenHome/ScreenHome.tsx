@@ -1,61 +1,47 @@
 import { useEffect, useState } from "react";
-import CardProducts from "../../ui/Cards/CardProducts/CardProducts";
 import Footer from "../../ui/Footer/Footer";
 import Header from "../../ui/Header/Header";
 import styles from "./ScreenHome.module.css";
 import { IDetalleDTO } from "../../../types/detalles/IDetalleDTO";
-import ProductList from "../../ui/List/ProductList/ProductList";
 import ProductCarousel from "../../ui/Carousel/ProductCarousel/ProductCarousel";
 
-
-
 const ScreenHome = () => {
-
-  const [productos, setProductos] = useState<IDetalleDTO[]>([])
-
+  const [productos, setProductos] = useState<IDetalleDTO[]>([]);
 
 
-  useEffect(()=>{
+  useEffect(() => {
+    const fetchPedido = async () => {
 
-    const fetchPedido = async ()=>{
-      const response = await fetch("http://localhost:8080/detalles/DTO")
-      const data = await response.json()
-      setProductos(data)
-  
-    }
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No hay token disponible");
+        return;
+      }
 
-    fetchPedido()
+      try {
+        const response = await fetch("http://localhost:8080/detalles/DTO", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 
+        if (!response.ok) {
+          console.error("Error en la respuesta:", response.status);
+          // Puedes manejar error o lanzar excepción
+          return;
+        }
 
-  },[])
+        const data = await response.json();
+        setProductos(data);
+      } catch (error) {
+        console.error("Error al hacer fetch:", error);
+      }
+    };
 
-  
-
-  useEffect(()=>{
-
-    // try{
-      
-    // const fetchPediddo = async ()=>{
-      
-    //   const categoria:ICategoria = {
-    //     nombre:"gaga"
-    //   }
-
-    //   const url = "http://localhost:8080/categorias";
-    //   return axios.post(url, categoria,)}
-    // fetchPediddo()
-
-
-
-    // }catch(err){
-    //   console.log("ERROR CREAR: ",err)
-    // }
-
-
-  },[])
-
-
-
+    fetchPedido();
+  }, []);
 
   return (
     <>

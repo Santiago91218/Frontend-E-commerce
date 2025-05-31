@@ -1,7 +1,5 @@
-import { useNavigate } from "react-router";
 import styles from "./ScreenAdmin.module.css";
 import { useEffect, useState } from "react";
-import { IDetalle } from "../../../types/detalles/IDetalle";
 import { detalleStore } from "../../../store/detalleStore";
 import { HeaderAdmin } from "../../ui/HeaderAdmin/HeaderAdmin";
 import { Productos } from "./Productos/Productos";
@@ -31,7 +29,18 @@ const ScreenAdmin = () => {
 
 	useEffect(() => {
 		const fetchPedido = async () => {
-			const response = await fetch("http://localhost:8080/detalles/DTO");
+			const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No hay token disponible");
+        return;
+      }
+			 const response = await fetch("http://localhost:8080/detalles/DTO", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
 			const data = await response.json();
 			setDetalle(data);
 		};

@@ -1,18 +1,15 @@
 .container {
 	background-color: #fff;
-	padding: 30px;
+	padding: 10px;
 	border-radius: 10px;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
-.title {
-	font-size: 24px;
-	margin-bottom: 20px;
-	text-align: center;
-	color: #333;
+.item{
+	display: flex;
+	gap: 2vw;
 }
-
 .addButton {
 	background-color: #007bff;
 	color: #fff;
@@ -29,6 +26,13 @@
 
 .addButton:hover {
 	background-color: #0056b3;
+}
+
+.title {
+	font-size: 24px;
+	margin-bottom: 20px;
+	text-align: center;
+	color: #333;
 }
 
 .table {

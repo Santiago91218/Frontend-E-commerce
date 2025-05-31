@@ -12,7 +12,6 @@ export const ModalCrearEditarUsuario: FC<IProps> = ({ usuario, closeModal, onSub
 	const [formState, setFormState] = useState<IUsuario>({
 		id: usuario?.id ?? Date.now(),
 		nombre: usuario?.nombre || "",
-		apellido: usuario?.apellido || "",
 		email: usuario?.email || "",
 		rol: usuario?.rol || RolUsuario.CLIENTE,
 	});
@@ -42,14 +41,6 @@ export const ModalCrearEditarUsuario: FC<IProps> = ({ usuario, closeModal, onSub
 						required
 					/>
 					<input
-						type="text"
-						name="apellido"
-						value={formState.apellido}
-						onChange={handleChange}
-						placeholder="Apellido"
-						required
-					/>
-					<input
 						type="email"
 						name="email"
 						value={formState.email}
@@ -63,8 +54,7 @@ export const ModalCrearEditarUsuario: FC<IProps> = ({ usuario, closeModal, onSub
 						onChange={handleChange}
 						required
 					>
-						<option value={RolUsuario.ADMIN}>Admin</option>
-						<option value={RolUsuario.EMPLEADO}>Empleado</option>
+						<option value={RolUsuario.ADMINISTRADOR}>Administrador</option>
 						<option value={RolUsuario.CLIENTE}>Cliente</option>
 					</select>
 
