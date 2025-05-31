@@ -5,17 +5,18 @@ import { AdminTable } from "../../../ui/Tables/AdminTable/AdminTable";
 import { ModalCrearEditarUsuario } from "../../../ui/Forms/ModalCrearEditarUsuario/ModalCrearEditarUsuario";
 import { ServiceUsuario } from "../../../../services/usuarioService";
 import Swal from "sweetalert2";
+import { IUsuarioDTO } from "../../../../types/IUsuarioDTO";
 
 export const Usuarios = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [usuarios, setUsuarios] = useState<IUsuario[]>([]);
-  const [usuarioActivo, setUsuarioActivo] = useState<IUsuario | null>(null);
+  const [usuarios, setUsuarios] = useState<IUsuarioDTO[]>([]);
+  const [usuarioActivo, setUsuarioActivo] = useState<IUsuarioDTO | null>(null);
   const usuarioService = new ServiceUsuario();
 
   useEffect(() => {
     const fetchUsuarios = async () => {
       try {
-        const data = await usuarioService.getUsuarios();
+        const data = await usuarioService.getUsuariosDTO();
         setUsuarios(data);
       } catch (error) {
         console.error("Error al cargar usuarios", error);
@@ -24,17 +25,12 @@ export const Usuarios = () => {
     fetchUsuarios();
   }, []);
 
-  const handleAdd = () => {
-    setUsuarioActivo(null);
-    setModalOpen(true);
-  };
-
-  const handleEdit = (usuario: IUsuario) => {
+  const handleEdit = (usuario: IUsuarioDTO) => {
     setUsuarioActivo(usuario);
     setModalOpen(true);
   };
 
- const handleDelete = async (usuario: IUsuario) => {
+ const handleDelete = async (usuario: IUsuarioDTO) => {
   try {
     const result = await Swal.fire({
       title: "¿Estás seguro?",
@@ -47,13 +43,12 @@ export const Usuarios = () => {
     });
 
     if (result.isConfirmed) {
-      await usuarioService.eliminarUsuario(usuario.id);
+      await usuarioService.eliminarUsuario(usuario.id!);
       Swal.fire({
 		  title: "¡Eliminado!",
 		  icon: "success",
 		});
     }
-	setUsuarios((prev) => prev.filter((u) => u.id !== usuario.id));
   } catch (error) {
     console.error("Error al eliminar usuario", error);
   }
@@ -66,7 +61,7 @@ export const Usuarios = () => {
   const handleSubmit = async (usuario: IUsuario) => {
     try {
       if (usuario.id) {
-        await usuarioService.editarUsuario(usuario.id, usuario);
+        await usuarioService.editarUsuarioDTO(usuario.id, usuario);
         setUsuarios((prev) =>
           prev.map((u) => (u.id === usuario.id ? usuario : u))
         );
@@ -82,7 +77,7 @@ export const Usuarios = () => {
 
   return (
     <div className={styles.container}>
-      <AdminTable<IUsuario>
+      <AdminTable<IUsuarioDTO>
         data={usuarios}
         onEdit={handleEdit}
         onDelete={handleDelete}

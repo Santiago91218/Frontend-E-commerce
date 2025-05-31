@@ -1,9 +1,10 @@
 import { FC, useState } from "react";
 import styles from "./ModalCrearEditarUsuario.module.css";
 import { IUsuario, RolUsuario } from "../../../../types/IUsuario";
+import { IUsuarioDTO } from "../../../../types/IUsuarioDTO";
 
 interface IProps {
-	usuario?: IUsuario | null;
+	usuario?: IUsuarioDTO | null;
 	closeModal: () => void;
 	onSubmit?: (usuario: IUsuario) => void;
 }

@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { IUsuario } from "../types/IUsuario";
+import { IUsuarioDTO } from "../types/IUsuarioDTO";
 const usuarioService = import.meta.env.VITE_URL_USUARIO;
 
 export class ServiceUsuario {
@@ -32,6 +33,31 @@ export class ServiceUsuario {
     });
     return response.data;
   }
+
+  public async getUsuariosDTO(): Promise<IUsuarioDTO[]> {
+    const url = `${this.baseURL}/DTO`;
+    const response: AxiosResponse<IUsuarioDTO[]> = await axios.get(url,{
+      headers: this.getAuthHeaders(),
+    });
+    return response.data;
+  }
+
+  public async getUsuarioByIdDTO(id: number): Promise<IUsuarioDTO> {
+    const url = `${this.baseURL}/DTO/${id}`;
+    const response: AxiosResponse<IUsuarioDTO> = await axios.get(url,{
+      headers: this.getAuthHeaders(),
+    });
+    return response.data;
+  }
+
+    public async editarUsuarioDTO(id: number, usuario: IUsuarioDTO): Promise<IUsuarioDTO> {
+    const url = `${this.baseURL}/DTO/${id}`;
+    const response: AxiosResponse<IUsuarioDTO> = await axios.put(url, usuario,{
+      headers: this.getAuthHeaders(),
+    });
+    return response.data;
+  }
+
 
   public async crearUsuario(usuario: IUsuario): Promise<IUsuario> {
     const url = `${this.baseURL}`;
