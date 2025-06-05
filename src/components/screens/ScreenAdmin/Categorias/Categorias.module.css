@@ -58,6 +58,19 @@
 	gap: 10px;
 }
 
+.pagination{
+	margin-top: 10px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1vw;
+}
+
+.arrow{
+	cursor: pointer;
+}
+
 .actions button {
 	background-color: transparent;
 	border: none;

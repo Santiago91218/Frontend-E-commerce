@@ -20,17 +20,13 @@ export class ServiceProducto {
 
   public async getProductos(): Promise<IProducto[]> {
     const url = `${this.baseURL}`;
-    const response: AxiosResponse<IProducto[]> = await axios.get(url, {
-      headers: this.getAuthHeaders(),
-    });
+    const response: AxiosResponse<IProducto[]> = await axios.get(url);
     return response.data;
   }
 
   public async getProductoById(id: number): Promise<IProducto> {
     const url = `${this.baseURL}/${id}`;
-    const response: AxiosResponse<IProducto> = await axios.get(url, {
-      headers: this.getAuthHeaders(),
-    });
+    const response: AxiosResponse<IProducto> = await axios.get(url);
     return response.data;
   }
 

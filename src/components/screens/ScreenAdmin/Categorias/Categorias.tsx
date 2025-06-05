@@ -4,26 +4,31 @@ import { ModalCrearEditarCategoria } from "../../../ui/Forms/ModalCrearEditarCat
 import { ICategoria } from "../../../../types/ICategoria";
 import { AdminTable } from "../../../ui/Tables/AdminTable/AdminTable";
 import { ServiceCategoria } from "../../../../services/categoriaService";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export const Categorias = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [categorias, setCategorias] = useState<ICategoria[]>([]);
+  const [page, setPage] = useState(0); // Página actual
+  const [totalPaginas, setTotalPaginas] = useState(0); // Total de páginas
   const [categoriaActiva, setCategoriaActiva] = useState<ICategoria | null>(
     null
   );
   const categoriaService = new ServiceCategoria();
 
   useEffect(() => {
-    const fetchCategorias = async () => {
-      try {
-        const data = await categoriaService.getCategorias();
-        setCategorias(data);
-      } catch (error) {
-        console.error("Error al cargar categorías", error);
-      }
-    };
-    fetchCategorias();
-  }, []);
+    fetchCategorias(page);
+  }, [page]);
+
+  const fetchCategorias = async (pagina: number) => {
+    try {
+      const data = await categoriaService.getCategoriasPaginado(pagina);
+      setCategorias(data.content);
+      setTotalPaginas(data.totalPages);
+    } catch (error) {
+      console.error("Error al cargar categorias paginadas", error);
+    }
+  };
 
   const handleAdd = () => {
     setCategoriaActiva(null);
@@ -52,13 +57,10 @@ export const Categorias = () => {
     try {
       if (categoria.id) {
         await categoriaService.editarCategoria(categoria.id, categoria);
-        setCategorias((prev) =>
-          prev.map((u) => (u.id === categoria.id ? categoria : u))
-        );
       } else {
-        const nuevaCategoria = await categoriaService.crearCategoria(categoria);
-        setCategorias((prev) => [...prev, nuevaCategoria]);
+        await categoriaService.crearCategoria(categoria);
       }
+      fetchCategorias(page);
       setModalOpen(false);
     } catch (error) {
       console.error("Error al guardar categoría", error);
@@ -72,8 +74,27 @@ export const Categorias = () => {
         onAdd={handleAdd}
         onEdit={handleEdit}
         onDelete={handleDelete}
-        renderItem={(cat) => <p> <strong>Nombre:</strong> {cat.nombre}</p>}
+        renderItem={(cat) => (
+          <p>
+            <strong>Nombre:</strong> {cat.nombre}
+          </p>
+        )}
       />
+      <div className={styles.pagination}>
+        <ArrowLeft
+          className={styles.arrow}
+          onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+        />
+        <span>
+          Página {page + 1} de {totalPaginas}
+        </span>
+        <ArrowRight
+          className={styles.arrow}
+          onClick={() =>
+            setPage((prev) => Math.min(prev + 1, totalPaginas - 1))
+          }
+        />
+      </div>
 
       {modalOpen && (
         <ModalCrearEditarCategoria

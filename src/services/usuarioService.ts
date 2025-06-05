@@ -26,6 +26,20 @@ export class ServiceUsuario {
     return response.data;
   }
 
+
+   async getUsuariosPaginado(page: number) {
+    const url = `${this.baseURL}/paginado?page=${page}&size=10`;
+    try {
+      const res = await axios.get(url, {
+        headers: this.getAuthHeaders(),
+      });
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   public async getUsuarioById(id: number): Promise<IUsuario> {
     const url = `${this.baseURL}/${id}`;
     const response: AxiosResponse<IUsuario> = await axios.get(url,{

@@ -41,6 +41,19 @@
 	gap: 12px;
 }
 
+.pagination{
+	margin-top: 10px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1vw;
+}
+
+.arrow{
+	cursor: pointer;
+}
+
 .row {
 	display: flex;
 	justify-content: space-between;

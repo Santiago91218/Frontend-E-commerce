@@ -19,9 +19,9 @@
 	justify-content: center;
 	align-items: center;
 	gap: 60px;
-	margin-bottom: 3rem;
+	margin-bottom: 1rem;
 	border-bottom: 2px solid #ccc;
-	padding-bottom: 3rem;
+	padding-bottom: 1rem;
 }
 
 .adminTabs button {
@@ -47,7 +47,7 @@
 .active::after {
 	content: "";
 	position: absolute;
-	bottom: -12px;
+	bottom: -6px;
 	left: 0;
 	right: 0;
 	height: 3px;

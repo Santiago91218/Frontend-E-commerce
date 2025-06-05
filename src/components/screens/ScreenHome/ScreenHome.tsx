@@ -4,44 +4,24 @@ import Header from "../../ui/Header/Header";
 import styles from "./ScreenHome.module.css";
 import { IDetalleDTO } from "../../../types/detalles/IDetalleDTO";
 import ProductCarousel from "../../ui/Carousel/ProductCarousel/ProductCarousel";
+import { ServiceDetalle } from "../../../services/serviceDetalle";
 
 const ScreenHome = () => {
   const [productos, setProductos] = useState<IDetalleDTO[]>([]);
-
+  const detalleService = new ServiceDetalle();
 
   useEffect(() => {
-    const fetchPedido = async () => {
-
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("No hay token disponible");
-        return;
-      }
-
-      try {
-        const response = await fetch("http://localhost:8080/detalles/DTO", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          console.error("Error en la respuesta:", response.status);
-          // Puedes manejar error o lanzar excepción
-          return;
-        }
-
-        const data = await response.json();
-        setProductos(data);
-      } catch (error) {
-        console.error("Error al hacer fetch:", error);
-      }
-    };
-
-    fetchPedido();
+    fetchDetalles();
   }, []);
+
+  const fetchDetalles = async () => {
+    try {
+      const data = await detalleService.getDetallesDTO();
+      setProductos(data);
+    } catch (error) {
+      console.error("Error al hacer fetch:", error);
+    }
+  };
 
   return (
     <>
