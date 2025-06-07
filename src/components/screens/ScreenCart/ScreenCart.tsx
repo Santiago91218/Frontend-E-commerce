@@ -6,23 +6,18 @@ import styles from "./ScreenCart.module.css";
 import { confirmarOrden } from "../../../services/ordenService";
 import { ServiceDetalle } from "../../../services/serviceDetalle";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 const detalleService = new ServiceDetalle();
 
 export const ScreenCart = () => {
 	const { items, eliminar, vaciar, total, cambiarCantidad } = useCartStore();
 	const [stockMap, setStockMap] = useState<Record<number, number>>({});
-	const [direccionEnvioId, setDireccionEnvioId] = useState<number | null>(null);
 	const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
 
 	const totalCantidad = items.reduce((acc, p) => acc + p.cantidad, 0);
 
 	const handleConfirmar = async () => {
-		if (!direccionEnvioId) {
-			alert("Selecciona una dirección antes de confirmar.");
-			return;
-		}
-
 		try {
 			const detalles = await Promise.all(
 				items.map((item) => detalleService.getDetalleById(item.detalleId))
@@ -32,8 +27,10 @@ export const ScreenCart = () => {
 				const item = items[i];
 				const detalle = detalles[i];
 				if (detalle.stock < item.cantidad) {
-					alert(
-						`No hay suficiente stock para "${item.nombre}". Stock disponible: ${detalle.stock}`
+					Swal.fire(
+						"Stock insuficiente",
+						`No hay suficiente stock para "${item.nombre}". Stock disponible: ${detalle.stock}`,
+						"warning"
 					);
 					return;
 				}
@@ -41,7 +38,7 @@ export const ScreenCart = () => {
 
 			const orden = {
 				usuario: { id: usuario.id },
-				direccionEnvio: { id: direccionEnvioId },
+				direccionEnvio: { id: 1 }, // TODO: reemplazar con dirección real cuando esté lista
 				total: total(),
 				detalles: items.map((item) => ({
 					producto: { id: item.detalleId },
@@ -50,11 +47,11 @@ export const ScreenCart = () => {
 			};
 
 			await confirmarOrden(orden);
-			alert("Compra confirmada");
+			Swal.fire("¡Compra confirmada!", "Tu pedido fue enviado con éxito", "success");
 			vaciar();
 		} catch (err) {
 			console.error("Error al confirmar compra:", err);
-			alert("Error al procesar la orden.");
+			Swal.fire("Error", "No se pudo procesar la orden", "error");
 		}
 	};
 
@@ -97,7 +94,6 @@ export const ScreenCart = () => {
 								/>
 								<div className={styles.detalles}>
 									<p className={styles.nombre}>{producto.nombre}</p>
-									{/* <p className={styles.talle}>Talle: {detallesProducto.ta}</p> */}
 									<div className={styles.controlesCantidad}>
 										<span className={styles.labelCantidad}>Cantidad:</span>
 										<div className={styles.simpleContador}>
