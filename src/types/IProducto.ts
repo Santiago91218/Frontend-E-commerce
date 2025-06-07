@@ -7,7 +7,6 @@ export interface IProducto {
 	tipoProducto: TipoProducto;
 	generoProducto: GeneroProducto;
 	categoria: ICategoria;
-	descripcion: string;
 }
 
 export enum TipoProducto {

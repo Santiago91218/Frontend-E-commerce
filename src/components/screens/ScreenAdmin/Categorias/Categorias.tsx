@@ -5,6 +5,7 @@ import { ICategoria } from "../../../../types/ICategoria";
 import { AdminTable } from "../../../ui/Tables/AdminTable/AdminTable";
 import { ServiceCategoria } from "../../../../services/categoriaService";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import Swal from "sweetalert2";
 
 export const Categorias = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -42,8 +43,24 @@ export const Categorias = () => {
 
   const handleDelete = async (categoria: ICategoria) => {
     try {
-      await categoriaService.eliminarCategoria(categoria.id);
-      setCategorias((prev) => prev.filter((c) => c.id !== categoria.id));
+      const result = await Swal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción no se puede revertir",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar",
+      });
+
+      if (result.isConfirmed) {
+        await categoriaService.eliminarCategoria(categoria.id);
+        await fetchCategorias(page);
+        Swal.fire({
+          title: "¡Eliminado!",
+          icon: "success",
+        });
+      }
     } catch (error) {
       console.error("Error al eliminar categoría", error);
     }

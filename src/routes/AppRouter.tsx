@@ -8,6 +8,7 @@ import ScreenLoginSignup from "../components/screens/ScreenLoginSignup/ScreenLog
 import { ScreenCart } from "../components/screens/ScreenCart/ScreenCart";
 import ScreenAdmin from "../components/screens/ScreenAdmin/ScreenAdmin";
 import { ScreenUser } from "../components/screens/ScreenUser/ScreenUser";
+import { ScreenDestacados } from "../components/screens/ScreenCategories/ScreenDestacados/ScreenDestacados";
 
 const AppRouter = () => {
   const userLogueado = localStorage.getItem("token");
@@ -30,6 +31,7 @@ const AppRouter = () => {
       <Route path="/hombre" element={<ScreenMen />} />
       <Route path="/mujer" element={<ScreenWomen />} />
       <Route path="/nino-a" element={<ScreenKids />} />
+      <Route path="/destacados" element={<ScreenDestacados />} />
       <Route path="/cart" element={<ScreenCart />} />
     </Routes>
   );

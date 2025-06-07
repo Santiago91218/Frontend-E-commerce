@@ -7,6 +7,7 @@ import { useParams } from "react-router";
 import { IDetalle } from "../../../types/detalles/IDetalle";
 import { ServiceDetalle } from "../../../services/serviceDetalle";
 import { IDetalleDTO } from "../../../types/detalles/IDetalleDTO";
+import { IDescuento } from "../../../types/IDescuento";
 
 const ScreenProductPage = () => {
   const { id } = useParams();
@@ -22,6 +23,14 @@ const ScreenProductPage = () => {
     IDetalleDTO | any
   >();
   const detalleService = new ServiceDetalle();
+  const [descuentoActivo, setDescuentoActivo] = useState<boolean>(false);
+
+  //Para ver si tiene descuento activo
+  useEffect(() => {
+    if (producto?.precio) {
+      setDescuentoActivo(isDescuentoActivo(producto.precio.descuento));
+    }
+  }, [producto]);
 
   //State detalles por producto
   const [detallesProducto, setDetallesProducto] = useState<IDetalle[]>([]);
@@ -70,6 +79,26 @@ const ScreenProductPage = () => {
   if (!producto)
     return <h2 style={{ textAlign: "center" }}>Cargando producto...</h2>;
 
+  const isDescuentoActivo = (descuento: IDescuento | undefined): boolean => {
+    if (!descuento) return false;
+
+    const hoy = new Date();
+    const fechaInicio = new Date(descuento.fechaInicio);
+    const fechaFin = new Date(descuento.fechaFin);
+
+    return hoy >= fechaInicio && hoy <= fechaFin;
+  };
+
+  const calcularDescuento = (
+    precioVenta: number,
+    porcentajeDescuento: number
+  ) => {
+    if (porcentajeDescuento <= 0) {
+      return precioVenta;
+    }
+    return precioVenta - precioVenta * (porcentajeDescuento / 100);
+  };
+
   //Obtener detalles por producto
   const getDetallesPorProducto = async () => {
     try {
@@ -110,12 +139,23 @@ const ScreenProductPage = () => {
             <p>Tipo: {producto.producto.tipoProducto}</p>
             <p>Categoria: {producto.producto.categoria.nombre}</p>
             {producto.precio ? (
-              <p>Precio: ${producto.precio.precioCompra}</p>
+              <>
+              {descuentoActivo ? 
+                <div className={styles.divDescuento}>
+                   <p>Precio: ${(calcularDescuento(producto.precio.precioVenta,
+                    producto.precio.descuento.descuento
+                  ))}</p>
+                  <p className={styles.precioTachado}>${producto.precio.precioVenta}</p>
+                  <p className={styles.totalDesacuento}>{producto.precio.descuento.descuento}% de descuento</p>
+                </div>
+            :
+            <p>Precio: ${producto.precio.precioVenta}</p>}
+              </>
             ) : (
               <p>Precio no disponible</p>
             )}
             <p>
-              Descripcion: {producto.producto.descripcion || "No disponible"}
+              Descripcion: {producto.descripcion || "No disponible"}
             </p>
 
             <div>

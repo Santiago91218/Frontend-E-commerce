@@ -1,0 +1,38 @@
+.container {
+  padding: 40px;
+  background-color: #f2f2f2;
+  min-height: 100vh;
+  font-family: "Unbounded", sans-serif;
+}
+
+.contentTittle {
+  width: 100%;
+  text-align: center;
+}
+
+.contentTittle h2 {
+  font-size: 2rem;
+}
+
+.containerTable {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+.item {
+  display: flex;
+  gap: 5vw;
+}
+
+.text{
+  text-align: center;
+}
+
+.containerData{
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+}
