@@ -3,7 +3,6 @@ import { IPrecio } from "../IPrecio";
 import { IProducto } from "../IProducto";
 import { ITalle } from "../ITalle";
 
-
 export interface IDetalle {
   id?: number;
   disponible?: boolean;
@@ -13,4 +12,5 @@ export interface IDetalle {
   estado: boolean;
   precio: IPrecio;
   imagenes: IImagen[];
+  descripcion: string;
 }

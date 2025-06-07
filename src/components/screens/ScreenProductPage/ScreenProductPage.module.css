@@ -25,7 +25,6 @@
   flex-direction: column;
   gap: 10px;
   margin-left: 15rem;
-  
 }
 
 .thumbnail {
@@ -37,6 +36,25 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.473);
 }
 
+.divDescuento {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  gap: 0.8vw;
+}
+
+.precioTachado {
+  text-decoration: line-through;
+  color: rgb(65, 65, 65);
+  font-size: 0.88rem;
+}
+
+.totalDesacuento{
+  color:green;
+  font-size: 0.88rem;
+}
+
 .thumbnail:hover {
   transform: scale(1.05);
 }
@@ -46,7 +64,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
 
 .mainImage img {

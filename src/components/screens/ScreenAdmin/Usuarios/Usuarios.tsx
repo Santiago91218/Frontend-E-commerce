@@ -49,6 +49,7 @@ export const Usuarios = () => {
 
       if (result.isConfirmed) {
         await usuarioService.eliminarUsuario(usuario.id!);
+        await fetchUsuarios(page)
         Swal.fire({
           title: "¡Eliminado!",
           icon: "success",

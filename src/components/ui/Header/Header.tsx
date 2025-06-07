@@ -42,7 +42,7 @@ const Header = () => {
         <div onClick={() => handleNavigate("nino-a")}>
           <p>Niños</p>
         </div>
-        <div>
+        <div onClick={()=> handleNavigate("destacados")}>
           <p>Destacados</p>
         </div>
       </div>

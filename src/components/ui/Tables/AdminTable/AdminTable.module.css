@@ -59,3 +59,7 @@
 .actions button:hover {
 	color: #007bff;
 }
+
+.buttonVer{
+	font-size: 1rem;
+}

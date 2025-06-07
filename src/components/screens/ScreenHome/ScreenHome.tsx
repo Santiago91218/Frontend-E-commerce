@@ -16,8 +16,8 @@ const ScreenHome = () => {
 
   const fetchDetalles = async () => {
     try {
-      const data = await detalleService.getDetallesDTO();
-      setProductos(data);
+      const result = await detalleService.getProductosDestacados()
+      setProductos(result);
     } catch (error) {
       console.error("Error al hacer fetch:", error);
     }
