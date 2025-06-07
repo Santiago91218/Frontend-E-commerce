@@ -4,30 +4,39 @@ import Header from "../../ui/Header/Header";
 import { Trash2 } from "lucide-react";
 import styles from "./ScreenCart.module.css";
 import { confirmarOrden } from "../../../services/ordenService";
+import { ServiceDetalle } from "../../../services/serviceDetalle";
+import { useEffect, useState } from "react";
+
+const detalleService = new ServiceDetalle();
 
 export const ScreenCart = () => {
-	const { items, agregar, eliminar, vaciar, total } = useCartStore();
+	const { items, eliminar, vaciar, total, cambiarCantidad } = useCartStore();
+	const [stockMap, setStockMap] = useState<Record<number, number>>({});
 
 	const totalCantidad = items.reduce((acc, p) => acc + p.cantidad, 0);
 
-	const cambiarCantidad = (detalleId: number, nuevaCantidad: number) => {
-		const item = items.find((p) => p.detalleId === detalleId);
-		if (!item) return;
-		eliminar(detalleId);
-		agregar({ ...item, cantidad: nuevaCantidad });
-	};
-
 	const handleConfirmar = async () => {
 		try {
+			for (const item of items) {
+				const detalle = await detalleService.getDetalleById(item.detalleId);
+				if (detalle.stock < item.cantidad) {
+					alert(
+						`No hay suficiente stock para "${item.nombre}". Stock disponible: ${detalle.stock}`
+					);
+					return;
+				}
+			}
+
 			const orden = {
-				usuarioId: 1,
-				direccionEnvioId: 1,
+				usuario: { id: 1 },
+				direccionEnvio: { id: 1 },
 				total: total(),
 				detalles: items.map((i) => ({
-					productoId: i.detalleId,
+					producto: { id: i.detalleId },
 					cantidad: i.cantidad,
 				})),
 			};
+
 			await confirmarOrden(orden);
 			alert("Compra confirmada 🎉");
 			vaciar();
@@ -36,6 +45,21 @@ export const ScreenCart = () => {
 			alert("Error al procesar la orden.");
 		}
 	};
+
+	useEffect(() => {
+		const fetchStocks = async () => {
+			const stocks: Record<number, number> = {};
+			for (const item of items) {
+				const detalle = await detalleService.getDetalleById(item.detalleId);
+				stocks[item.detalleId] = detalle.stock;
+			}
+			setStockMap(stocks);
+		};
+
+		if (items.length > 0) {
+			fetchStocks();
+		}
+	}, [items]);
 
 	return (
 		<div className={styles.contenedor}>
@@ -61,34 +85,50 @@ export const ScreenCart = () => {
 								/>
 								<div className={styles.detalles}>
 									<p className={styles.nombre}>{producto.nombre}</p>
-									<p className={styles.nombre}>Talle: 40</p>
+									<p className={styles.talle}>Talle: 40</p>
 									<div className={styles.controlesCantidad}>
-										<p className={styles.nombre}>Cantidad: </p>
-										<button
-											onClick={() =>
-												cambiarCantidad(
-													producto.detalleId,
-													Math.max(1, producto.cantidad - 1)
-												)
-											}
-											className={styles.botonCantidad}
-										>
-											-
-										</button>
-										<span className={styles.valorCantidad}>
-											{producto.cantidad}
-										</span>
-										<button
-											onClick={() =>
-												cambiarCantidad(
-													producto.detalleId,
-													producto.cantidad + 1
-												)
-											}
-											className={styles.botonCantidad}
-										>
-											+
-										</button>
+										<span className={styles.labelCantidad}>Cantidad:</span>
+
+										<div className={styles.simpleContador}>
+											<button
+												className={styles.simpleBoton}
+												onClick={() =>
+													cambiarCantidad(
+														producto.detalleId,
+														Math.max(1, producto.cantidad - 1)
+													)
+												}
+											>
+												−
+											</button>
+
+											<span className={styles.simpleValor}>
+												{producto.cantidad}
+											</span>
+
+											<button
+												className={styles.simpleBoton}
+												onClick={() =>
+													cambiarCantidad(
+														producto.detalleId,
+														producto.cantidad + 1
+													)
+												}
+												disabled={
+													producto.cantidad >=
+													(stockMap[producto.detalleId] ?? Infinity)
+												}
+											>
+												＋
+											</button>
+
+											{producto.cantidad >=
+												(stockMap[producto.detalleId] ?? Infinity) && (
+												<span className={styles.simpleWarningInline}>
+													Stock máximo
+												</span>
+											)}
+										</div>
 									</div>
 								</div>
 								<button
