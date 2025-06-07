@@ -55,14 +55,25 @@
 .imagen {
 	width: 125px;
 	height: 125px;
+	object-fit: cover;
+	border-radius: 4px;
 }
 
 .detalles {
 	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .nombre {
 	font-weight: 600;
+	margin-bottom: 0.25rem;
+}
+
+.talle {
+	font-weight: normal;
+	font-size: 0.95rem;
 	margin-bottom: 0.25rem;
 }
 
@@ -80,20 +91,50 @@
 	align-items: center;
 	gap: 0.5rem;
 	margin-top: 0.5rem;
-	align-items: flex-end;
 }
 
-.botonCantidad {
-	background-color: #e0e0e0;
+.labelCantidad {
+	font-weight: 500;
+	font-size: 0.9rem;
+}
+
+.simpleContador {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+}
+
+.simpleBoton {
+	background: none;
 	border: none;
-	border-radius: 4px;
-	padding: 0.25rem 0.75rem;
-	font-size: 1rem;
+	font-size: 1.5rem;
+	font-weight: bold;
+	color: #1c6cb1;
 	cursor: pointer;
+	transition: color 0.2s ease, transform 0.1s ease;
 }
 
-.valorCantidad {
-	font-weight: bold;
+.simpleBoton:hover:not(:disabled) {
+	color: #16578f;
+	transform: scale(1.1);
+}
+
+.simpleBoton:disabled {
+	color: #bbb;
+	cursor: not-allowed;
+}
+
+.simpleValor {
+	min-width: 20px;
+	text-align: center;
+	font-weight: 600;
+	font-size: 1.1rem;
+}
+
+.simpleWarningInline {
+	color: #d32f2f;
+	font-size: 0.75rem;
+	margin-left: 6px;
 }
 
 .botonEliminar {
@@ -137,6 +178,7 @@
 	width: 100%;
 	cursor: pointer;
 	margin-top: 1rem;
+	transition: background-color 0.2s ease;
 }
 
 .botonConfirmar:hover {
