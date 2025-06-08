@@ -205,11 +205,21 @@ const ScreenProductPage = () => {
 											return;
 										}
 
+										const precioBase = producto.precio.precioVenta;
+										const descuento = producto.precio.descuento?.descuento ?? 0;
+										const precioFinal = calcularDescuento(
+											precioBase,
+											descuento
+										);
+
 										agregar({
 											detalleId: producto.id!,
 											nombre: producto.producto.nombre,
 											imagen: producto.imagenes[0]?.url || "",
-											precio: producto.precio.precioCompra,
+											precio: precioFinal,
+											precioVenta: precioBase,
+											descuento: descuento,
+											talle: producto.talle.talle,
 											cantidad,
 										});
 

@@ -7,6 +7,9 @@ export interface ICartItem {
 	imagen: string;
 	precio: number;
 	cantidad: number;
+	precioVenta?: number;
+	descuento?: number;
+	talle?: string;
 }
 
 interface ICartState {
