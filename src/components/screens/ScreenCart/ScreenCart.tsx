@@ -3,30 +3,27 @@ import Footer from "../../ui/Footer/Footer";
 import Header from "../../ui/Header/Header";
 import { Trash2 } from "lucide-react";
 import styles from "./ScreenCart.module.css";
-import { confirmarOrden } from "../../../services/ordenService";
 import { ServiceDetalle } from "../../../services/serviceDetalle";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import DireccionesCliente from "../../ui/DireccionesCliente/DireccionesCliente";
 import ModalAgregarDireccion from "../../ui/ModalAgregarDireccion/ModalAgregarDireccion";
 import { handlePagar } from "../../../services/mercadoPagoService";
+const detalleService = new ServiceDetalle();
 import { mapCartItemsToMercadoPago } from "../../../types/IItemCarrito";
 
-const detalleService = new ServiceDetalle();
-
 export const ScreenCart = () => {
-	const { items, eliminar, vaciar, total, cambiarCantidad } = useCartStore();
+	const { items, eliminar, total, cambiarCantidad } = useCartStore();
 	const [stockMap, setStockMap] = useState<Record<number, number>>({});
 	const [direccionSeleccionadaId, setDireccionSeleccionadaId] = useState<number | null>(null);
 	const [mostrarModalDireccion, setMostrarModalDireccion] = useState(false);
 	const [recargarDirecciones, setRecargarDirecciones] = useState(false);
-	const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
-	const token = localStorage.getItem("token") || undefined;
 
+	const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
 	const totalCantidad = items.reduce((acc, p) => acc + p.cantidad, 0);
 
-	const handleConfirmar = async () => {
-		if (!direccionSeleccionadaId) {
+	const handlePagarUnificado = async () => {
+		if (direccionSeleccionadaId === null) {
 			Swal.fire("Dirección requerida", "Debés seleccionar una dirección de envío", "warning");
 			return;
 		}
@@ -49,25 +46,15 @@ export const ScreenCart = () => {
 				}
 			}
 
-			const itemsMP = mapCartItemsToMercadoPago(items);
-			await handlePagar(itemsMP, usuario.email, token);
-
-			const orden = {
-				usuario: { id: usuario.id },
-				direccionEnvio: { id: direccionSeleccionadaId },
-				total: total(),
-				detalles: items.map((item) => ({
-					producto: { id: item.detalleId },
-					cantidad: item.cantidad,
-				})),
-			};
-
-			await confirmarOrden(orden);
-			Swal.fire("¡Compra confirmada!", "Tu pedido fue enviado con éxito", "success");
-			vaciar();
+			Swal.fire({
+				title: "Redirigiendo a Mercado Pago...",
+				allowOutsideClick: false,
+				didOpen: () => Swal.showLoading(null),
+			});
+			await handlePagar(mapCartItemsToMercadoPago(items));
 		} catch (err) {
-			console.error("Error al confirmar compra:", err);
-			Swal.fire("Error", "No se pudo procesar la orden", "error");
+			console.error("Error al iniciar el pago:", err);
+			Swal.fire("Error", "No se pudo iniciar el pago con Mercado Pago", "error");
 		}
 	};
 
@@ -116,12 +103,12 @@ export const ScreenCart = () => {
 								<div className={styles.detalles}>
 									<p className={styles.nombre}>{producto.nombre}</p>
 									<p>Talle: {producto.talle}</p>
-									<p>
-										Precio:
-										{producto.descuento && producto.descuento > 0
-											? ` $${producto.precio}`
-											: ` $${producto.precio}`}
-									</p>
+									{producto.descuento && producto.descuento > 0 ? (
+										<p>Precio con descuento: ${producto.precio}</p>
+									) : (
+										<p>Precio: ${producto.precio}</p>
+									)}
+
 									<div className={styles.controlesCantidad}>
 										<span className={styles.labelCantidad}>Cantidad:</span>
 										<div className={styles.simpleContador}>
@@ -189,7 +176,13 @@ export const ScreenCart = () => {
 						))}
 						<hr className={styles.linea} />
 						<p className={styles.total}>Total a pagar: ${total()}</p>
-						<button onClick={handleConfirmar}>Pagar con Mercado Pago</button>
+
+						<button
+							className={styles.botonConfirmar}
+							onClick={handlePagarUnificado}
+						>
+							Pagar con Mercado Pago
+						</button>
 					</div>
 				</div>
 			</main>

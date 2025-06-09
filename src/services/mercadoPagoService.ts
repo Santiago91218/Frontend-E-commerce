@@ -1,41 +1,50 @@
 import axios from "axios";
+import Swal from "sweetalert2";
+import { IItemCarrito } from "../types/IItemCarrito";
 
-interface IItemCarrito {
-	title: string;
-	quantity: number;
-	unit_price: number;
-	picture_url?: string;
-	category_id?: string;
-}
+const API_URL = import.meta.env.VITE_URL_MERCADOPAGO;
 
-const API_URL = import.meta.env.VITE_URL_BACKEND;
+export const handlePagar = async (items: IItemCarrito[]): Promise<boolean> => {
+	const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
+	const token = localStorage.getItem("token");
 
-export const handlePagar = async (items: IItemCarrito[], email: string, token?: string) => {
 	const itemsMP = items.map((item) => ({
 		title: item.title,
 		quantity: item.quantity,
 		unitPrice: item.unit_price,
-		picture_url: item.picture_url,
-		category_id: item.category_id,
 	}));
 
 	try {
+		console.log("title:" + itemsMP[0].title);
+		console.log("quantity:" + itemsMP[0].quantity);
+		console.log("unit_price:" + itemsMP[0].unitPrice);
+		console.log(token);
 		const response = await axios.post(
-			`${API_URL}/api/mercadopago/crear-preferencia`,
+			`${API_URL}/crear-preferencia`,
 			{
 				items: itemsMP,
-				email: email,
+				email: usuario.email,
 			},
 			{
 				headers: {
-					Authorization: token ? `Bearer ${token}` : "",
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
 				},
+				withCredentials: true,
 			}
 		);
 
-		window.location.href = response.data.init_point;
+		const initPoint = response.data.init_point;
+
+		if (!initPoint) {
+			throw new Error("init_point no recibido");
+		}
+
+		window.location.href = initPoint;
+		return true;
 	} catch (error) {
-		console.error("Error al iniciar el pago:", error);
-		alert("Ocurrió un error al iniciar el pago");
+		console.error("Error al iniciar pago:", error);
+		Swal.fire("Error", "No se pudo iniciar el pago", "error");
+		return false;
 	}
 };
