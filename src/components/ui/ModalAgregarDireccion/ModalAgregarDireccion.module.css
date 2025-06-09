@@ -1,0 +1,79 @@
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 9999;
+}
+
+.modal {
+	background-color: white;
+	border-radius: 8px;
+	padding: 24px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+	width: 100%;
+	max-width: 400px;
+	position: relative;
+}
+
+.modal h2 {
+	margin-bottom: 16px;
+	text-align: center;
+	font-size: 20px;
+}
+
+.formGroup {
+	margin-bottom: 12px;
+	display: flex;
+	flex-direction: column;
+}
+
+.formGroup label {
+	font-weight: 600;
+	margin-bottom: 4px;
+}
+
+.formGroup input {
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+.botones {
+	margin-top: 20px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.boton {
+	padding: 8px 16px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 14px;
+	transition: background-color 0.2s ease;
+}
+
+.botonAgregar {
+	background-color: #007bff;
+	color: white;
+}
+
+.botonAgregar:hover {
+	background-color: #0056b3;
+}
+
+.botonCancelar {
+	background-color: #ccc;
+}
+
+.botonCancelar:hover {
+	background-color: #999;
+}

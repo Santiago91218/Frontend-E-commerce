@@ -9,6 +9,9 @@ import { ScreenCart } from "../components/screens/ScreenCart/ScreenCart";
 import ScreenAdmin from "../components/screens/ScreenAdmin/ScreenAdmin";
 import { ScreenUser } from "../components/screens/ScreenUser/ScreenUser";
 import { ScreenDestacados } from "../components/screens/ScreenCategories/ScreenDestacados/ScreenDestacados";
+import PagoExitoso from "../components/screens/PagoExitoso/PagoExitoso";
+import PagoFallido from "../components/screens/PagoFallido/PagoFallido";
+import PagoPendiente from "../components/screens/PagoPendiente/PagoPendiente";
 
 const AppRouter = () => {
 	const userLogueado = localStorage.getItem("token");
@@ -70,6 +73,18 @@ const AppRouter = () => {
 			<Route
 				path="/cart"
 				element={<ScreenCart />}
+			/>
+			<Route
+				path="/pago-exitoso"
+				element={<PagoExitoso />}
+			/>
+			<Route
+				path="/pago-fallido"
+				element={<PagoFallido />}
+			/>
+			<Route
+				path="/pago-pendiente"
+				element={<PagoPendiente />}
 			/>
 		</Routes>
 	);
