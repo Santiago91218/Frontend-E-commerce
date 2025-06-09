@@ -1,38 +1,30 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import Swal from "sweetalert2";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCartStore } from "../../../store/useCartStore";
 
 const PagoExitoso = () => {
-	const [mensaje, setMensaje] = useState("Procesando pago...");
-	const [estado, setEstado] = useState<"cargando" | "exito" | "rechazado">("cargando");
-
-	const [params] = useSearchParams();
+	const navigate = useNavigate();
+	const vaciar = useCartStore((state) => state.vaciar);
 
 	useEffect(() => {
-		const status = params.get("collection_status");
-
-		if (status === "approved") {
-			setEstado("exito");
-			setMensaje("¡Gracias por tu compra! El pago fue aprobado.");
-			Swal.fire("Pago aprobado", "Tu pedido fue confirmado con éxito", "success");
-		} else {
-			setEstado("rechazado");
-			setMensaje("El pago no fue aprobado o fue cancelado.");
-			Swal.fire("Pago no confirmado", "No se pudo procesar el pago", "warning");
-		}
-	}, [params]);
+		vaciar();
+	}, [vaciar]);
 
 	return (
 		<div style={{ padding: "2rem", textAlign: "center" }}>
-			<h1>{mensaje}</h1>
-			{estado === "rechazado" && (
-				<a
-					href="/carrito"
-					style={{ marginTop: "1rem", display: "inline-block" }}
-				>
-					Volver al carrito
-				</a>
-			)}
+			<h1>Gracias por tu compra</h1>
+			<p>Tu pago fue procesado correctamente.</p>
+			<button
+				onClick={() => navigate("/")}
+				style={{
+					marginTop: "1rem",
+					padding: "0.5rem 1rem",
+					fontSize: "1rem",
+					cursor: "pointer",
+				}}
+			>
+				Volver al inicio
+			</button>
 		</div>
 	);
 };

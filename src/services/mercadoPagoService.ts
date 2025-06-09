@@ -15,10 +15,6 @@ export const handlePagar = async (items: IItemCarrito[]): Promise<boolean> => {
 	}));
 
 	try {
-		console.log("title:" + itemsMP[0].title);
-		console.log("quantity:" + itemsMP[0].quantity);
-		console.log("unit_price:" + itemsMP[0].unitPrice);
-		console.log(token);
 		const response = await axios.post(
 			`${API_URL}/crear-preferencia`,
 			{

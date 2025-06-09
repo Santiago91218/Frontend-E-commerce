@@ -15,11 +15,12 @@ import PagoPendiente from "../components/screens/PagoPendiente/PagoPendiente";
 
 const AppRouter = () => {
 	const userLogueado = localStorage.getItem("token");
-
 	const location = useLocation();
-	const isLoginPath = location.pathname === "/login";
 
-	if (!userLogueado && !isLoginPath) {
+	const publicPaths = ["/login", "/pago-exitoso", "/pago-fallido", "/pago-pendiente"];
+	const isPublicPath = publicPaths.includes(location.pathname);
+
+	if (!userLogueado && !isPublicPath) {
 		return (
 			<Navigate
 				to="/login"
