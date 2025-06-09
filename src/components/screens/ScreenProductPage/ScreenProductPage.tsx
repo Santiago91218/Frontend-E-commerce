@@ -8,12 +8,9 @@ import { IDetalle } from "../../../types/detalles/IDetalle";
 import { ServiceDetalle } from "../../../services/serviceDetalle";
 import { IDetalleDTO } from "../../../types/detalles/IDetalleDTO";
 import { IDescuento } from "../../../types/IDescuento";
-<<<<<<< Updated upstream
 import { useCartStore } from "../../../store/useCartStore";
 import Swal from "sweetalert2";
-=======
 import ProductCarousel from "../../ui/Carousel/ProductCarousel/ProductCarousel";
->>>>>>> Stashed changes
 
 const ScreenProductPage = () => {
 	const { id } = useParams();
@@ -208,8 +205,6 @@ const ScreenProductPage = () => {
 											});
 											return;
 										}
-
-<<<<<<< Updated upstream
 										const precioBase = producto.precio.precioVenta;
 										const descuento = producto.precio.descuento?.descuento ?? 0;
 										const precioFinal = calcularDescuento(
@@ -247,30 +242,13 @@ const ScreenProductPage = () => {
 				<div className={styles.featuredSection}>
 					<h3 className={styles.featuredTitle}>Productos Relacionados:</h3>
 					<div className={styles.featuredProducts}>
-						{productosRelacionados?.map((producto: IDetalleDTO) => (
-							<CardProducts
-								key={producto.id}
-								products={producto}
-							/>
-						))}
+						<ProductCarousel products={productosRelacionados} />
 					</div>
 				</div>
 				<Footer />
 			</div>
 		</>
 	);
-=======
-        <div className={styles.featuredSection}>
-          <h3 className={styles.featuredTitle}>Productos Relacionados:</h3>
-          <div className={styles.featuredProducts}>
-            <ProductCarousel products={productosRelacionados} />
-          </div>
-        </div>
-        <Footer />
-      </div>
-    </>
-  );
->>>>>>> Stashed changes
 };
 
 export default ScreenProductPage;
