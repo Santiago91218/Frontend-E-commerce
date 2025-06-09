@@ -25,6 +25,12 @@ export class ServiceDetalle {
     return response.data;
   }
 
+  public async getDetalles() {
+    const url = `${this.baseURL}`;
+    const response = await axios.get(url);
+    return response.data;
+  }
+
   public async getDetallesDTO() {
     const url = `${this.baseURL}/DTO`;
     const response = await axios.get(url);
@@ -53,6 +59,17 @@ export class ServiceDetalle {
   public async getProductosDestacados(): Promise<IDetalleDTO[]> {
     const url = `${this.baseURL}/destacados`;
     const response = await axios.get(url);
+    return response.data;
+  }
+
+  public async agregarStock(
+    idDetalle: number,
+    cantidad: number
+  ): Promise<IDetalle> {
+    const url = `${this.baseURL}/agregar-stock/${idDetalle}?cantidadStock=${cantidad}`;
+    const response = await axios.put(url,{}, {
+      headers: this.getAuthHeaders(),
+    });
     return response.data;
   }
 

@@ -22,7 +22,6 @@ const ModalCrearEditarProducto: FC<IProps> = ({ closeModal, producto, onSubmit }
     tipoProducto: producto?.tipoProducto || TipoProducto.REMERA,
     generoProducto: producto?.generoProducto || GeneroProducto.MASCULINO,
     categoria: producto?.categoria || { id: 0, nombre: "", descripcion: "" },
-    descripcion: producto?.descripcion || "",
   });
 
   useEffect(() => {
@@ -94,17 +93,6 @@ const ModalCrearEditarProducto: FC<IProps> = ({ closeModal, producto, onSubmit }
               type="text"
               name="nombre"
               value={formState.nombre}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className={styles.formGroup}>
-            <label>Descripción</label>
-            <textarea
-              placeholder="Ingrese una descripcion"
-              name="descripcion"
-              value={formState.descripcion}
               onChange={handleChange}
               required
             />
