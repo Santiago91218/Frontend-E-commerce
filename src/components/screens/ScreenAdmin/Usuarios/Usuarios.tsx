@@ -26,7 +26,7 @@ export const Usuarios = () => {
       setUsuarios(data.content);
       setTotalPaginas(data.totalPages);
     } catch (error) {
-      console.error("Error al cargar categorias paginadas", error);
+      console.error("Error al cargar ususarios paginadas", error);
     }
   };
 

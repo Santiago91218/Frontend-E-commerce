@@ -9,8 +9,10 @@ export interface IDetalle {
   talle: ITalle;
   stock: number;
   producto: IProducto;
+  color:string
   estado: boolean;
   precio: IPrecio;
   imagenes: IImagen[];
   descripcion: string;
+  destacado:boolean
 }

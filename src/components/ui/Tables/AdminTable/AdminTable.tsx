@@ -1,15 +1,17 @@
 import { ReactNode } from "react";
 import styles from "./AdminTable.module.css";
 import { LuPencil, LuPlus, LuTrash2 } from "react-icons/lu";
-import { Eye } from "lucide-react";
+import { ArrowDown, ArrowUp, Plus } from "lucide-react";
 
 export interface IAdminTableProps<T> {
   data: T[];
   onAdd?: () => void;
   onEdit?: (item: T) => void;
   onDelete?: (item: T) => void;
-  onView?: (item: T) => void;
+  onArrow?: (item: T) => void;
+  onAddItem?: (item: T)=> void;
   renderItem: (item: T) => ReactNode;
+  expandedId?: number | null;
 }
 
 export function AdminTable<T>({
@@ -17,8 +19,10 @@ export function AdminTable<T>({
   onAdd,
   onEdit,
   onDelete,
-  onView,
+  onArrow,
+  onAddItem,
   renderItem,
+  expandedId,
 }: IAdminTableProps<T>) {
   return (
     <div className={styles.container}>
@@ -34,6 +38,20 @@ export function AdminTable<T>({
               <div key={idx} className={styles.row}>
                 <div className={styles.content}>{renderItem(item)}</div>
                 <div className={styles.actions}>
+                  {onArrow && (
+                    <button onClick={() => onArrow(item)}>
+                      {expandedId === (item as any).id ? (
+                        <ArrowUp />
+                      ) : (
+                        <ArrowDown />
+                      )}
+                    </button>
+                  )}
+                  {onAddItem && (
+                    <button onClick={() => onAddItem(item)}>
+                      <Plus />
+                    </button>
+                  )}
                   {onEdit && (
                     <button onClick={() => onEdit(item)}>
                       <LuPencil />
@@ -42,11 +60,6 @@ export function AdminTable<T>({
                   {onDelete && (
                     <button onClick={() => onDelete(item)}>
                       <LuTrash2 />
-                    </button>
-                  )}
-                  {onView && (
-                    <button onClick={() => onView(item)}>
-                      <Eye size={28} />
                     </button>
                   )}
                 </div>
