@@ -81,7 +81,7 @@ const DireccionesCliente: FC<IProps> = ({
 						{direccionActual ? (
 							<span>
 								{direccionActual.calle} {direccionActual.numero},{" "}
-								{direccionActual.localidad}
+								{direccionActual.localidad}, {direccionActual.provincia}
 							</span>
 						) : (
 							<span className={styles.placeholder}>Seleccioná una dirección</span>
@@ -103,7 +103,8 @@ const DireccionesCliente: FC<IProps> = ({
 											: ""
 									}`}
 								>
-									{direccion.calle} {direccion.numero}, {direccion.localidad}
+									{direccion.calle} {direccion.numero}, {direccion.localidad},{" "}
+									{direccion.provincia}
 								</div>
 							))}
 						</div>
