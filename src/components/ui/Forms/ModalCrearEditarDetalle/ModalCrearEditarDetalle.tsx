@@ -8,6 +8,7 @@ import { ServicePrecio } from "../../../../services/servicePrecio";
 import { ServiceDescuento } from "../../../../services/serviceDescuento";
 import { IPrecio } from "../../../../types/IPrecio";
 import { IProducto } from "../../../../types/IProducto";
+import Swal from "sweetalert2";
 
 interface IProps {
   closeModal: () => void;
@@ -119,15 +120,26 @@ export const ModalCrearEditarDetalle: FC<IProps> = ({
 
       if (detalle.id && detalle.id > 0) {
         await serviceDetalle.editarDetalle(detalle.id, detalleData); // Actualizar detalle existent
-        console.log("Detalle actualizado correctamente");
+        Swal.fire({
+          title: "Detalle editado!",
+          icon: "success",
+        });
       } else {
         await serviceDetalle.crearDetalle(detalleData); // Crear detalle nuevo
-        console.log("Detalle creado correctamente");
+        Swal.fire({
+          title: "Detalle creado!",
+          icon: "success",
+        });
       }
 
       await serviceDetalle.getDetallesPorProducto(producuto.id);
     } catch (error) {
       console.error("Error al guardar detalle", error);
+      Swal.fire({
+        title: "Error",
+        text: "Hubo un problema al guardar el detalle.",
+        icon: "error",
+      });
     }
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
