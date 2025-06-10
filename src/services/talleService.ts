@@ -30,7 +30,7 @@ export class ServiceTalle {
     return response.data;
   }
 
-  public async crearTalle(talle: string): Promise<ITalle> {
+  public async crearTalle(talle: ITalle): Promise<ITalle> {
     const url = `${this.baseURL}`;
     const response: AxiosResponse<ITalle> = await axios.post(url, talle, {
       headers: this.getAuthHeaders(),

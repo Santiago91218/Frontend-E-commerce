@@ -1,17 +1,18 @@
 import { FC, useState } from "react";
 import styles from "./ModalCrearTalle.module.css";
 import { ServiceTalle } from "../../../../services/talleService";
+import Swal from "sweetalert2";
 
 interface IProps {
   closeModal: () => void;
 }
 
 export const ModalCrearTalle: FC<IProps> = ({ closeModal }) => {
- const [formState, setFormState] = useState<{ talle: string }>({
+  const [formState, setFormState] = useState<{ talle: string }>({
     talle: "",
   });
 
-  const serviceTalle = new ServiceTalle()
+  const serviceTalle = new ServiceTalle();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -20,16 +21,24 @@ export const ModalCrearTalle: FC<IProps> = ({ closeModal }) => {
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
 
- const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  try {
-    await serviceTalle.crearTalle(formState.talle); 
-    closeModal();
-  } catch (error) {
-    console.error("Error al crear Talle", error);
-  }
-};
-
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      await serviceTalle.crearTalle(formState);
+      Swal.fire({
+        title: "Talle creado!",
+        icon: "success",
+      });
+      closeModal();
+    } catch (error) {
+      console.error("Error al crear Talle", error);
+      Swal.fire({
+        title: "Error",
+        text: "Hubo un problema al guardar el talle.",
+        icon: "error",
+      });
+    }
+  };
 
   return (
     <div className={styles.overlay}>

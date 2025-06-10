@@ -1,8 +1,22 @@
+import { useEffect, useState } from "react";
 import styles from "./SidebarFilter.module.css";
-
-
+import { ICategoria } from "../../../types/ICategoria";
+import { ServiceCategoria } from "../../../services/categoriaService";
 
 const SidebarFilter = () => {
+  const [categorias, setCategorias] = useState<ICategoria[]>([]);
+  const service = new ServiceCategoria();
+
+  useEffect(() => {
+    const fetf = async () => {
+      const cate = await service.getCategorias();
+
+      setCategorias(cate);
+    };
+
+    fetf();
+  }, []);
+
   return (
     <>
       <div className={styles.sidebarFilterContainer}>
@@ -32,18 +46,13 @@ const SidebarFilter = () => {
 
         <div className={styles.categorySection}>
           <h3>Categoría:</h3>
-          <div className={styles.checkboxItem}>
-            <input type="checkbox" id="running" />
-            <label htmlFor="running">Running</label>
-          </div>
-          <div className={styles.checkboxItem}>
-            <input type="checkbox" id="urbano" />
-            <label htmlFor="urbano">Urbano</label>
-          </div>
-          <div className={styles.checkboxItem}>
-            <input type="checkbox" id="casual" />
-            <label htmlFor="casual">Casual</label>
-          </div>
+          {categorias.length > 0 &&
+            categorias.map((cat) => (
+              <div className={styles.checkboxItem}>
+                <input type="checkbox" id="urbano" />
+                <label htmlFor="urbano">{cat.nombre}</label>
+              </div>
+            ))}
         </div>
 
         <div className={styles.productTypeSection}>
