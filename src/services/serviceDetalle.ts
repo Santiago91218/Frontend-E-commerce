@@ -62,17 +62,6 @@ export class ServiceDetalle {
     return response.data;
   }
 
-  public async agregarStock(
-    idDetalle: number,
-    cantidad: number
-  ): Promise<IDetalle> {
-    const url = `${this.baseURL}/agregar-stock/${idDetalle}?cantidadStock=${cantidad}`;
-    const response = await axios.put(url,{}, {
-      headers: this.getAuthHeaders(),
-    });
-    return response.data;
-  }
-
   public async getDetallesPorProducto(productoId: number): Promise<IDetalle[]> {
     const url = `${this.baseURL}/${productoId}/detalles`;
     const response = await axios.get(url);

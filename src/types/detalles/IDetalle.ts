@@ -12,7 +12,7 @@ export interface IDetalle {
   color:string
   estado: boolean;
   precio: IPrecio;
-  imagenes: IImagen[];
+  imagenes?: IImagen[];
   descripcion: string;
   destacado:boolean
 }
