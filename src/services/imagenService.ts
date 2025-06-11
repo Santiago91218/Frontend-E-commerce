@@ -26,7 +26,7 @@ export class ServiceImagen {
     return response.data;
   }
 
-   public async obtenerImagenPorDetalle(imagenId: number): Promise<IImagen[]> {
+  public async obtenerImagenPorDetalle(imagenId: number): Promise<IImagen[]> {
     const url = `${this.baseURL}/detalle/${imagenId}`;
     const response: AxiosResponse<IImagen[]> = await axios.get(url, {
       headers: this.getAuthHeaders(),

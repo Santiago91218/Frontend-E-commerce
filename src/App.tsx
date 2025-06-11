@@ -4,19 +4,19 @@ import { useEffect } from "react";
 import { useAuthStore } from "./store/useAuthStore";
 
 function App() {
-	const loadFromStorage = useAuthStore((state) => state.loadFromStorage);
+  const loadFromStorage = useAuthStore((state) => state.loadFromStorage);
 
-	useEffect(() => {
-		loadFromStorage();
-	}, []);
+  useEffect(() => {
+    loadFromStorage();
+  }, []);
 
-	return (
-		<>
-			<BrowserRouter>
-				<AppRouter />
-			</BrowserRouter>
-		</>
-	);
+  return (
+    <>
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+    </>
+  );
 }
 
 export default App;

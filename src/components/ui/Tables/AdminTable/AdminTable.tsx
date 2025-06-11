@@ -9,7 +9,7 @@ export interface IAdminTableProps<T> {
   onEdit?: (item: T) => void;
   onDelete?: (item: T) => void;
   onArrow?: (item: T) => void;
-  onAddItem?: (item: T)=> void;
+  onAddItem?: (item: T) => void;
   renderItem: (item: T) => ReactNode;
   expandedId?: number | null;
 }

@@ -8,10 +8,14 @@ import Swal from "sweetalert2";
 interface IProps {
   closeModal: () => void;
   detalle: IDetalle;
-    onImagenCreada: () => void;
+  onImagenCreada: () => void;
 }
 
-export const ModalDataImagen: FC<IProps> = ({ closeModal, detalle,onImagenCreada }) => {
+export const ModalDataImagen: FC<IProps> = ({
+  closeModal,
+  detalle,
+  onImagenCreada,
+}) => {
   const [formState, setFormState] = useState<{ url: string; alt: string }>({
     url: "",
     alt: "",
@@ -39,7 +43,7 @@ export const ModalDataImagen: FC<IProps> = ({ closeModal, detalle,onImagenCreada
         icon: "success",
       });
       closeModal();
-      onImagenCreada()
+      onImagenCreada();
     } catch (error) {
       console.error("Error al crear imagen", error);
       Swal.fire({

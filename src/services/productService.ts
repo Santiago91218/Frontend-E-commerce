@@ -24,7 +24,7 @@ export class ServiceProducto {
     return response.data;
   }
 
-   async getProductosPaginado(page: number) {
+  async getProductosPaginado(page: number) {
     const url = `${this.baseURL}/paginado?page=${page}&size=10`;
     try {
       const res = await axios.get(url, {

@@ -49,7 +49,7 @@ export const Usuarios = () => {
 
       if (result.isConfirmed) {
         await usuarioService.eliminarUsuario(usuario.id!);
-        await fetchUsuarios(page)
+        await fetchUsuarios(page);
         Swal.fire({
           title: "¡Eliminado!",
           icon: "success",
@@ -101,15 +101,16 @@ export const Usuarios = () => {
           </div>
         )}
       />
-       <div className={styles.pagination}>
+      <div className={styles.pagination}>
         <ArrowLeft
-        className={styles.arrow}
-         onClick={() => setPage((prev) => Math.max(prev - 1, 0))} />
+          className={styles.arrow}
+          onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+        />
         <span>
           Página {page + 1} de {totalPaginas}
         </span>
         <ArrowRight
-        className={styles.arrow}
+          className={styles.arrow}
           onClick={() =>
             setPage((prev) => Math.min(prev + 1, totalPaginas - 1))
           }

@@ -9,5 +9,5 @@ export interface IOrdenCompra {
   usuario: IUsuario;
   fechaCompra: string;
   direccionEnvio: IDireccion;
-  detalles:IOrdenCompraDetalle[]
+  detalles: IOrdenCompraDetalle[];
 }

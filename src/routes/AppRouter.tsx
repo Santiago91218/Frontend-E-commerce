@@ -14,81 +14,39 @@ import PagoFallido from "../components/screens/PagoFallido/PagoFallido";
 import PagoPendiente from "../components/screens/PagoPendiente/PagoPendiente";
 
 const AppRouter = () => {
-	const userLogueado = localStorage.getItem("token");
-	const location = useLocation();
+  const userLogueado = localStorage.getItem("token");
+  const location = useLocation();
 
-	const publicPaths = ["/login", "/pago-exitoso", "/pago-fallido", "/pago-pendiente"];
-	const isPublicPath = publicPaths.includes(location.pathname);
+  const publicPaths = [
+    "/login",
+    "/pago-exitoso",
+    "/pago-fallido",
+    "/pago-pendiente",
+  ];
+  const isPublicPath = publicPaths.includes(location.pathname);
 
-	if (!userLogueado && !isPublicPath) {
-		return (
-			<Navigate
-				to="/login"
-				replace
-			/>
-		);
-	}
+  if (!userLogueado && !isPublicPath) {
+    return <Navigate to="/login" replace />;
+  }
 
-	return (
-		<Routes>
-			<Route
-				path="/"
-				element={<Navigate to="home" />}
-			/>
-			<Route
-				path="/home"
-				element={<ScreenHome />}
-			/>
-			<Route
-				path="/login"
-				element={<ScreenLoginSignup />}
-			/>
-			<Route
-				path="/user"
-				element={<ScreenUser />}
-			/>
-			<Route
-				path="/product/:id"
-				element={<ScreenProductPage />}
-			/>
-			<Route
-				path="/admin"
-				element={<ScreenAdmin />}
-			/>
-			<Route
-				path="/hombre"
-				element={<ScreenMen />}
-			/>
-			<Route
-				path="/mujer"
-				element={<ScreenWomen />}
-			/>
-			<Route
-				path="/nino-a"
-				element={<ScreenKids />}
-			/>
-			<Route
-				path="/destacados"
-				element={<ScreenDestacados />}
-			/>
-			<Route
-				path="/cart"
-				element={<ScreenCart />}
-			/>
-			<Route
-				path="/pago-exitoso"
-				element={<PagoExitoso />}
-			/>
-			<Route
-				path="/pago-fallido"
-				element={<PagoFallido />}
-			/>
-			<Route
-				path="/pago-pendiente"
-				element={<PagoPendiente />}
-			/>
-		</Routes>
-	);
+  return (
+    <Routes>
+      <Route path="/" element={<Navigate to="home" />} />
+      <Route path="/home" element={<ScreenHome />} />
+      <Route path="/login" element={<ScreenLoginSignup />} />
+      <Route path="/user" element={<ScreenUser />} />
+      <Route path="/product/:id" element={<ScreenProductPage />} />
+      <Route path="/admin" element={<ScreenAdmin />} />
+      <Route path="/hombre" element={<ScreenMen />} />
+      <Route path="/mujer" element={<ScreenWomen />} />
+      <Route path="/nino-a" element={<ScreenKids />} />
+      <Route path="/destacados" element={<ScreenDestacados />} />
+      <Route path="/cart" element={<ScreenCart />} />
+      <Route path="/pago-exitoso" element={<PagoExitoso />} />
+      <Route path="/pago-fallido" element={<PagoFallido />} />
+      <Route path="/pago-pendiente" element={<PagoPendiente />} />
+    </Routes>
+  );
 };
 
 export default AppRouter;

@@ -3,9 +3,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { IDetalleDTO } from "../../../../types/detalles/IDetalleDTO";
 import CardProducts from "../../Cards/CardProducts/CardProducts";
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import styles from "./ProductCarousel.module.css";
 
 interface IProps {
@@ -17,20 +17,20 @@ const ProductCarousel: FC<IProps> = ({ products }) => {
     <Swiper
       modules={[Navigation, Pagination]}
       spaceBetween={0}
-      slidesPerView={3} 
+      slidesPerView={3}
       navigation
       pagination={{ clickable: true }}
       loop={true}
       className={styles.swiperContainer}
       breakpoints={{
         0: {
-          slidesPerView: 1,  
+          slidesPerView: 1,
         },
         768: {
           slidesPerView: 2,
         },
         1024: {
-          slidesPerView: 3,  
+          slidesPerView: 3,
         },
       }}
     >
@@ -43,4 +43,4 @@ const ProductCarousel: FC<IProps> = ({ products }) => {
   );
 };
 
-export default ProductCarousel;  
+export default ProductCarousel;

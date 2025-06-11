@@ -9,10 +9,18 @@ import { useEffect, useState } from "react";
 const SidebarFilter = () => {
   const [categorias, setCategorias] = useState<ICategoria[]>([]);
   const [talles, setTalles] = useState<ITalle[]>([]);
-  
 
-  const { orden, categoria, tipoProducto, talle, minPrecio, maxPrecio, setFiltro, resetFiltros, setPrecio } =
-    useFilterStore();
+  const {
+    orden,
+    categoria,
+    tipoProducto,
+    talle,
+    minPrecio,
+    maxPrecio,
+    setFiltro,
+    resetFiltros,
+    setPrecio,
+  } = useFilterStore();
 
   useEffect(() => {
     const categoriaService = new ServiceCategoria();
@@ -31,7 +39,7 @@ const SidebarFilter = () => {
     setFiltro(tipo, valor);
   };
 
-    const handlePrecioChange = (
+  const handlePrecioChange = (
     tipo: "minPrecio" | "maxPrecio",
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -43,10 +51,9 @@ const SidebarFilter = () => {
     <div className={styles.sidebarFilterContainer}>
       <div className={styles.filterButtonContainer}>
         <button onClick={resetFiltros}>Resetear Filtros</button>
-
       </div>
 
-            <div className={styles.priceFilterSection}>
+      <div className={styles.priceFilterSection}>
         <h3>Filtrar por precio:</h3>
         <label htmlFor="minPrecio">Mínimo:</label>
         <input
@@ -131,7 +138,9 @@ const SidebarFilter = () => {
               type="checkbox"
               id={t.talle}
               checked={talle.includes(t.talle.toLowerCase())}
-              onChange={() => handleCheckboxChange("talle", t.talle.toLowerCase())}
+              onChange={() =>
+                handleCheckboxChange("talle", t.talle.toLowerCase())
+              }
             />
             <label htmlFor={t.talle}>{t.talle}</label>
           </div>
