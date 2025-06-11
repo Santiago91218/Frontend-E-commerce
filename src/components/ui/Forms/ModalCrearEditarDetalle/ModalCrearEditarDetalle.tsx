@@ -39,7 +39,7 @@ export const ModalCrearEditarDetalle: FC<IProps> = ({
     },
     producto: detalle?.producto || producuto,
     stock: detalle?.stock || 0,
-    talle: detalle?.talle || { talle: "" },
+    talle: { id: 0, talle: "" }, 
     destacado: detalle?.destacado ?? false,
   });
 
@@ -69,7 +69,7 @@ export const ModalCrearEditarDetalle: FC<IProps> = ({
           descuentoId = detalle.precio.descuento.id;
         } else {
           const responseDescuento = await serviceDescuento.crearDescuento(
-            // Crear descuento nuevo
+            
             detalle.precio.descuento
           );
           descuentoId = responseDescuento.id;
@@ -92,7 +92,7 @@ export const ModalCrearEditarDetalle: FC<IProps> = ({
       let precioId = 0;
       if (detalle.precio.id && detalle.precio.id > 0) {
         await servicePrecio.editarPrecio({
-          // Actualizar precio existente
+          
           id: detalle.precio.id,
           ...precioData,
         });
@@ -112,7 +112,7 @@ export const ModalCrearEditarDetalle: FC<IProps> = ({
         color: detalle.color,
         descripcion: detalle.descripcion,
         estado: detalle.estado,
-        imagenes: detalle?.imagenes ?? [],
+         imagenes: detalle?.imagenes ?? [],
         precio: { id: precioId },
         producto: { id: producuto.id },
         stock: detalle.stock,
@@ -240,150 +240,177 @@ export const ModalCrearEditarDetalle: FC<IProps> = ({
   }, [detalle, producuto]);
 
   return (
-    <div className={styles.overlay}>
-      <div className={styles.modal}>
-        <h2>{detalle ? "Editar Detalle" : "Crear Detalle"}</h2>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.formGroup}>
-            <label>Color</label>
+  <div className={styles.overlay}>
+    <div className={styles.modal}>
+      <h2>{detalle ? "Editar Detalle" : "Crear Detalle"}</h2>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        
+        <div className={styles.formGroup}>
+          <label>Color</label>
+          <input
+            type="text"
+            name="color"
+            placeholder="Ingrese el color"
+            value={formState.color}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        
+        <div className={styles.formGroup}>
+          <label>Stock</label>
+          <input
+            type="number"
+            name="stock"
+            placeholder="Ingrese el stock"
+            value={formState.stock}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        
+        <div className={styles.formGroup} style={{ gridColumn: "span 2" }}>
+          <label>Descripción</label>
+          <textarea
+            name="descripcion"
+            placeholder="Ingrese la descripción"
+            value={formState.descripcion}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        
+        <div className={styles.formGroup}>
+          <label>Talle</label>
+          <select
+            name="talle"
+            value={formState.talle.id}
+            onChange={handleTalleChange}
+          >
+            <option disabled value={0}>
+                Select talle
+              </option>
+            {tallesDisponibles.map((talle) => (
+              <option key={talle.id} value={talle.id}>
+                {talle.talle}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        
+        <div className={styles.formGroup}>
+          <label className={styles.checkboxLabel}>
             <input
-              placeholder="Ingrese el color"
-              type="text"
-              name="color"
-              value={formState.color}
-              onChange={handleChange}
-              required
+              type="checkbox"
+              name="destacado"
+              checked={formState.destacado}
+              onChange={(e) =>
+                setFormState((prev) => ({
+                  ...prev,
+                  destacado: e.target.checked,
+                }))
+              }
             />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Stock</label>
+            <span>Marcar como destacado</span>
+          </label>
+        </div>
+
+        
+        <div className={styles.formGroup}>
+          <h2>Precio</h2>
+          <label>Precio Compra</label>
+          <input
+            type="number"
+            name="precioCompra"
+            value={formState.precio.precioCompra}
+            onChange={handlePrecioChange}
+            required
+          />
+        </div>
+
+        
+        <div className={styles.formGroup}>
+          <h2>&nbsp;</h2> 
+          <label>Precio Venta</label>
+          <input
+            type="number"
+            name="precioVenta"
+            value={formState.precio.precioVenta}
+            onChange={handlePrecioChange}
+            required
+          />
+        </div>
+
+        
+        <div className={styles.formGroup} style={{ gridColumn: "span 2" }}>
+          <h2>Descuento</h2>
+          <label className={styles.checkboxLabel}>
             <input
-              placeholder="Ingrese el stock"
-              type="number"
-              name="stock"
-              value={formState.stock}
-              onChange={handleChange}
-              required
+              type="checkbox"
+              checked={usarDescuento}
+              onChange={() => setUsarDescuento((prev) => !prev)}
             />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Descripción</label>
-            <textarea
-              placeholder="Ingrese la descripción"
-              name="descripcion"
-              value={formState.descripcion}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Talle</label>
-            <select
-              name="talle"
-              id="talle"
-              value={formState.talle.id}
-              onChange={handleTalleChange}
-            >
-              {tallesDisponibles.map((talle) => (
-                <option key={talle.id} value={talle.id}>
-                  {talle.talle}
-                </option>
-              ))}
-            </select>
-            <label>
+            <span>Usar descuento</span>
+          </label>
+        </div>
+
+        
+        {usarDescuento && (
+          <>
+            <div className={styles.formGroup}>
+              <label>Fecha Inicio</label>
               <input
-                type="checkbox"
-                name="destacado"
-                checked={formState.destacado}
-                onChange={(e) =>
-                  setFormState((prev) => ({
-                    ...prev,
-                    destacado: e.target.checked,
-                  }))
-                }
+                type="date"
+                name="fechaInicio"
+                value={formState.precio.descuento?.fechaInicio}
+                onChange={handleDescuentoChange}
+                required
               />
-              Marcar como destacado
-            </label>
-          </div>
-          <div className={styles.formGroup}>
-            <h2>Precio</h2>
-            <label>Precio Compra</label>
-            <input
-              type="number"
-              name="precioCompra"
-              value={formState.precio.precioCompra}
-              onChange={handlePrecioChange}
-              required
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Precio Venta</label>
-            <input
-              type="number"
-              name="precioVenta"
-              value={formState.precio.precioVenta}
-              onChange={handlePrecioChange}
-              required
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <h2>Descuento</h2>
-            <label>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label>Fecha Fin</label>
               <input
-                type="checkbox"
-                checked={usarDescuento}
-                onChange={() => setUsarDescuento((prev) => !prev)}
+                type="date"
+                name="fechaFin"
+                value={formState.precio.descuento?.fechaFin}
+                onChange={handleDescuentoChange}
+                required
               />
-            </label>
-          </div>
-          {usarDescuento && (
-            <>
-              <div className={styles.formGroup}>
-                <label>Fecha Inicio</label>
-                <input
-                  type="date"
-                  name="fechaInicio"
-                  value={formState.precio.descuento?.fechaInicio}
-                  onChange={handleDescuentoChange}
-                  required
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label>Fecha fin</label>
-                <input
-                  type="date"
-                  name="fechaFin"
-                  value={formState.precio.descuento?.fechaFin}
-                  onChange={handleDescuentoChange}
-                  required
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label>Porcentaje Descuento (%)</label>
-                <input
-                  type="number"
-                  name="descuento"
-                  value={formState.precio.descuento?.descuento}
-                  onChange={handleDescuentoChange}
-                  required
-                />
-              </div>
-            </>
-          )}
-          <div className={styles.buttonContainer}>
-            <button
-              type="button"
-              className={styles.cancelButton}
-              onClick={closeModal}
-            >
-              Cancelar
-            </button>
-            <button className={styles.submitButton} type="submit">
-              Confirmar
-            </button>
-          </div>
-        </form>
-      </div>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label>Porcentaje Descuento (%)</label>
+              <input
+                type="number"
+                name="descuento"
+                value={formState.precio.descuento?.descuento}
+                onChange={handleDescuentoChange}
+                required
+              />
+            </div>
+          </>
+        )}
+
+        
+        <div className={styles.buttonContainer} style={{ gridColumn: "span 2" }}>
+          <button
+            type="button"
+            className={styles.cancelButton}
+            onClick={closeModal}
+          >
+            Cancelar
+          </button>
+          <button className={styles.submitButton} type="submit">
+            Confirmar
+          </button>
+        </div>
+      </form>
     </div>
-  );
+  </div>
+);
 };
