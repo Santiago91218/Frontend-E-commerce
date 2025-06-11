@@ -11,7 +11,6 @@ type Tab = "productos" | "categorias" | "usuarios";
 
 const ScreenAdmin = () => {
 	const setDetalle = detalleStore((state) => state.setDetalle);
-	const setDetalleActivo = detalleStore((state) => state.setDetalleActivo);
 	const [activeTab, setActiveTab] = useState<Tab>("productos");
 
 	const cargarContenido = () => {

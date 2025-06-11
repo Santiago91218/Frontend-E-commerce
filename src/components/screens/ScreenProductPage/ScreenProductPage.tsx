@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import CardProducts from "../../ui/Cards/CardProducts/CardProducts";
 import Footer from "../../ui/Footer/Footer";
 import Header from "../../ui/Header/Header";
 import styles from "./ScreenProductPage.module.css";
