@@ -122,10 +122,10 @@ export const Productos = () => {
 
   const toggleDetalle = async (id: number) => {
     if (productoExpandido === id) {
-      setProductoExpandido(null); // Si ya esta expandido, cerrar
+      setProductoExpandido(null); 
     } else {
       if (!detallesPorProducto[id]) {
-        await getDetallesProductos(id); // Si no esta cargado, traer detalles
+        await getDetallesProductos(id);
       }
       setProductoExpandido(id);
     }

@@ -65,7 +65,7 @@ export const ModalCrearEditarDetalle: FC<IProps> = ({
       let descuentoId = 0;
       if (detalle.precio.descuento && detalle.precio.descuento.descuento > 0) {
         if (detalle.precio.descuento.id && detalle.precio.descuento.id > 0) {
-          await serviceDescuento.editarDescuento(detalle.precio.descuento); // actualizar descuento existente
+          await serviceDescuento.editarDescuento(detalle.precio.descuento);
           descuentoId = detalle.precio.descuento.id;
         } else {
           const responseDescuento = await serviceDescuento.crearDescuento(
@@ -96,7 +96,7 @@ export const ModalCrearEditarDetalle: FC<IProps> = ({
         });
         precioId = detalle.precio.id;
       } else {
-        const responsePrecio = await servicePrecio.crearPrecio(precioData); // Crear precio nuevo
+        const responsePrecio = await servicePrecio.crearPrecio(precioData);
         precioId = responsePrecio.id;
       }
 
@@ -119,13 +119,13 @@ export const ModalCrearEditarDetalle: FC<IProps> = ({
       };
 
       if (detalle.id && detalle.id > 0) {
-        await serviceDetalle.editarDetalle(detalle.id, detalleData); // Actualizar detalle existent
+        await serviceDetalle.editarDetalle(detalle.id, detalleData); 
         Swal.fire({
           title: "Detalle editado!",
           icon: "success",
         });
       } else {
-        await serviceDetalle.crearDetalle(detalleData); // Crear detalle nuevo
+        await serviceDetalle.crearDetalle(detalleData); 
         Swal.fire({
           title: "Detalle creado!",
           icon: "success",

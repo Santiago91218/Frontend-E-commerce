@@ -6,7 +6,7 @@ import {
 } from "../../../../types/IProducto";
 import styles from "./ModalCrearEditarProducto.module.css";
 import { ServiceCategoria } from "../../../../services/categoriaService";
-import { ICategoria } from "../../../../types/ICategoria"; // Asegúrate de importar ICategoria
+import { ICategoria } from "../../../../types/ICategoria"; 
 import Swal from "sweetalert2";
 
 interface IProps {
@@ -20,7 +20,7 @@ const ModalCrearEditarProducto: FC<IProps> = ({
   producto,
   onSubmit,
 }) => {
-  const [categorias, setCategorias] = useState<ICategoria[]>([]); // Estado para las categorías
+  const [categorias, setCategorias] = useState<ICategoria[]>([]); 
   const [formState, setFormState] = useState<Omit<IProducto, "id">>({
     disponible: producto?.disponible ?? true,
     nombre: producto?.nombre || "",

@@ -29,7 +29,6 @@ const ScreenProductPage = () => {
   const [descuentoActivo, setDescuentoActivo] = useState<boolean>(false);
   const [detallesProducto, setDetallesProducto] = useState<IDetalle[]>([]);
 
-  //Para ver si tiene descuento activo
   useEffect(() => {
     if (producto?.precio) {
       setDescuentoActivo(isDescuentoActivo(producto.precio.descuento));

@@ -10,8 +10,8 @@ import Swal from "sweetalert2";
 export const Categorias = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [categorias, setCategorias] = useState<ICategoria[]>([]);
-  const [page, setPage] = useState(0); // Página actual
-  const [totalPaginas, setTotalPaginas] = useState(0); // Total de páginas
+  const [page, setPage] = useState(0);
+  const [totalPaginas, setTotalPaginas] = useState(0);
   const [categoriaActiva, setCategoriaActiva] = useState<ICategoria | null>(
     null
   );

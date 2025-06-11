@@ -11,8 +11,8 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 export const Usuarios = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [usuarios, setUsuarios] = useState<IUsuarioDTO[]>([]);
-  const [page, setPage] = useState(0); // Página actual
-  const [totalPaginas, setTotalPaginas] = useState(0); // Total de páginas
+  const [page, setPage] = useState(0); 
+  const [totalPaginas, setTotalPaginas] = useState(0); 
   const [usuarioActivo, setUsuarioActivo] = useState<IUsuarioDTO | null>(null);
   const usuarioService = new ServiceUsuario();
 

@@ -12,8 +12,6 @@ interface IProps {
   recargar: boolean;
 }
 
-// ...importaciones iguales
-
 const DireccionesCliente: FC<IProps> = ({
   usuario,
   direccionSeleccionadaId,
