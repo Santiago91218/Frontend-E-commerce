@@ -1,6 +1,5 @@
 import { IDetalle } from "./detalles/IDetalle";
 
-
 export interface IImagen {
   id?: number;
   disponible?: boolean;

@@ -20,19 +20,25 @@ export class ServiceDescuento {
 
   public async crearDescuento(descuento: IDescuento): Promise<IDescuento> {
     const url = `${this.baseURL}`;
-    const response: AxiosResponse<IDescuento> = await axios.post(url, descuento, {
-      headers: this.getAuthHeaders(),
-    });
+    const response: AxiosResponse<IDescuento> = await axios.post(
+      url,
+      descuento,
+      {
+        headers: this.getAuthHeaders(),
+      }
+    );
     return response.data;
   }
 
   public async editarDescuento(descuento: IDescuento): Promise<IDescuento> {
     const url = `${this.baseURL}/${descuento.id}`;
-    const response: AxiosResponse<IDescuento> = await axios.put(url, descuento, {
-      headers: this.getAuthHeaders(),
-    });
+    const response: AxiosResponse<IDescuento> = await axios.put(
+      url,
+      descuento,
+      {
+        headers: this.getAuthHeaders(),
+      }
+    );
     return response.data;
   }
-
-
 }

@@ -10,10 +10,12 @@ import { IDetalleDTO } from "../../../../types/detalles/IDetalleDTO";
 import { useFilterStore } from "../../../../store/filterStore";
 
 export const ScreenDestacados = () => {
-  const [productosDestacados, setProductosDestacados] = useState<IDetalleDTO[]>([]);
+  const [productosDestacados, setProductosDestacados] = useState<IDetalleDTO[]>(
+    []
+  );
   const [inputText, setInputText] = useState<string>("");
-    const { orden, categoria, tipoProducto, talle, minPrecio, maxPrecio } =
-      useFilterStore();
+  const { orden, categoria, tipoProducto, talle, minPrecio, maxPrecio } =
+    useFilterStore();
   const detalleService = new ServiceDetalle();
 
   const getProducts = async () => {
@@ -25,32 +27,40 @@ export const ScreenDestacados = () => {
     getProducts();
   }, []);
 
-  const productosFiltrados = productosDestacados.filter((producto: IDetalleDTO) => {
-    const nombre = producto.producto.nombre.toLowerCase();
-    const coincideBusqueda = nombre.includes(inputText.toLowerCase());
+  const productosFiltrados = productosDestacados.filter(
+    (producto: IDetalleDTO) => {
+      const nombre = producto.producto.nombre.toLowerCase();
+      const coincideBusqueda = nombre.includes(inputText.toLowerCase());
 
-    const coincideCategoria =
-      categoria.length === 0 ||
-      categoria.includes(producto.producto.categoria.nombre.toLowerCase());
+      const coincideCategoria =
+        categoria.length === 0 ||
+        categoria.includes(producto.producto.categoria.nombre.toLowerCase());
 
-    const coincideTipo =
-      tipoProducto.length === 0 ||
-      tipoProducto.includes(producto.producto.tipoProducto);
+      const coincideTipo =
+        tipoProducto.length === 0 ||
+        tipoProducto.includes(producto.producto.tipoProducto);
 
-    const coincideTalle =
-      talle.length === 0 ||
-      (producto.talle
-        ? talle.includes(producto.talle.talle.toLowerCase())
-        : true);
-    
-    const precioVenta = producto.precio.precioVenta;
+      const coincideTalle =
+        talle.length === 0 ||
+        (producto.talle
+          ? talle.includes(producto.talle.talle.toLowerCase())
+          : true);
 
-    const coincideMinPrecio = minPrecio === null || precioVenta >= minPrecio;
-    const coincideMaxPrecio = maxPrecio === null || precioVenta <= maxPrecio;
+      const precioVenta = producto.precio.precioVenta;
 
-    return (
-      coincideBusqueda && coincideCategoria && coincideTipo && coincideTalle && coincideMinPrecio && coincideMaxPrecio);
-  });
+      const coincideMinPrecio = minPrecio === null || precioVenta >= minPrecio;
+      const coincideMaxPrecio = maxPrecio === null || precioVenta <= maxPrecio;
+
+      return (
+        coincideBusqueda &&
+        coincideCategoria &&
+        coincideTipo &&
+        coincideTalle &&
+        coincideMinPrecio &&
+        coincideMaxPrecio
+      );
+    }
+  );
 
   const productosOrdenados = [...productosFiltrados].sort((a, b) => {
     if (orden.includes("ascendente")) {
@@ -65,7 +75,7 @@ export const ScreenDestacados = () => {
   const handleChangeInputSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
   };
-  
+
   return (
     <>
       <div className={styles.screenDestacados}>

@@ -25,11 +25,11 @@ export class ServicePrecio {
     });
     return response.data;
   }
-public async editarPrecio(precio: IPrecio): Promise<IPrecio> {
-  const url = `${this.baseURL}/${precio.id}`;
-  const response: AxiosResponse<IPrecio> = await axios.put(url, precio, {
-    headers: this.getAuthHeaders(),
-  });
-  return response.data;
-}
+  public async editarPrecio(precio: IPrecio): Promise<IPrecio> {
+    const url = `${this.baseURL}/${precio.id}`;
+    const response: AxiosResponse<IPrecio> = await axios.put(url, precio, {
+      headers: this.getAuthHeaders(),
+    });
+    return response.data;
+  }
 }

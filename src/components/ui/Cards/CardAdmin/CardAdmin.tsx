@@ -9,12 +9,16 @@ type IProps = {
 
 const CardAdmin: FC<IProps> = ({ producto, onEdit }) => {
   return (
-    <div className={styles.gridContainer}  >
+    <div className={styles.gridContainer}>
       {producto ? (
         producto.map((item) => (
-          <div className={styles.card} key ={item.id}>
+          <div className={styles.card} key={item.id}>
             <img
-              src={item.imagenes && item.imagenes.length > 0 ? item.imagenes[0].url : 'default-image-url'}
+              src={
+                item.imagenes && item.imagenes.length > 0
+                  ? item.imagenes[0].url
+                  : "default-image-url"
+              }
               alt="Imagen del producto"
               className={styles.image}
             />

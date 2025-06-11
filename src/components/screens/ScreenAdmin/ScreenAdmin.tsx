@@ -10,77 +10,76 @@ import { Usuarios } from "./Usuarios/Usuarios";
 type Tab = "productos" | "categorias" | "usuarios";
 
 const ScreenAdmin = () => {
-	const setDetalle = detalleStore((state) => state.setDetalle);
-	const [activeTab, setActiveTab] = useState<Tab>("productos");
+  const [activeTab, setActiveTab] = useState<Tab>("productos");
 
-	const cargarContenido = () => {
-		switch (activeTab) {
-			case "productos":
-				return <Productos />;
-			case "categorias":
-				return <Categorias />;
-			case "usuarios":
-				return <Usuarios />;
-			default:
-				return null;
-		}
-	};
+  const setDetalle = detalleStore((state) => state.setDetalle);
+  const setDetalleActivo = detalleStore((state) => state.setDetalleActivo);
 
-	useEffect(() => {
-		const fetchPedido = async () => {
-			const token = localStorage.getItem("token");
+  const cargarContenido = () => {
+    switch (activeTab) {
+      case "productos":
+        return <Productos />;
+      case "categorias":
+        return <Categorias />;
+      case "usuarios":
+        return <Usuarios />;
+      default:
+        return null;
+    }
+  };
+
+  useEffect(() => {
+    const fetchPedido = async () => {
+      const token = localStorage.getItem("token");
       if (!token) {
         console.error("No hay token disponible");
         return;
       }
-			 const response = await fetch("http://localhost:8080/detalles/DTO", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-			const data = await response.json();
-			setDetalle(data);
-		};
-		fetchPedido();
-	}, []);
+      const response = await fetch("http://localhost:8080/detalles/DTO", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setDetalle(data);
+    };
+    fetchPedido();
+  }, []);
 
+  return (
+    <>
+      <HeaderAdmin />
+      <div className={styles.adminContainer}>
+        <div className={styles.adminContent}>
+          <nav className={styles.adminTabs}>
+            <button
+              className={`${activeTab === "productos" ? styles.active : ""}`}
+              onClick={() => setActiveTab("productos")}
+            >
+              Productos
+            </button>
+            <button
+              className={`${activeTab === "categorias" ? styles.active : ""}`}
+              onClick={() => setActiveTab("categorias")}
+            >
+              Categorías
+            </button>
+            <button
+              className={`${activeTab === "usuarios" ? styles.active : ""}`}
+              onClick={() => setActiveTab("usuarios")}
+            >
+              Usuarios
+            </button>
+          </nav>
 
-
-	return (
-		<>
-			<HeaderAdmin />
-			<div className={styles.adminContainer}>
-				<div className={styles.adminContent}>
-					<nav className={styles.adminTabs}>
-						<button
-							className={`${activeTab === "productos" ? styles.active : ""}`}
-							onClick={() => setActiveTab("productos")}
-						>
-							Productos
-						</button>
-						<button
-							className={`${activeTab === "categorias" ? styles.active : ""}`}
-							onClick={() => setActiveTab("categorias")}
-						>
-							Categorías
-						</button>
-						<button
-							className={`${activeTab === "usuarios" ? styles.active : ""}`}
-							onClick={() => setActiveTab("usuarios")}
-						>
-							Usuarios
-						</button>
-					</nav>
-
-					<div className={styles.tabContent}>{cargarContenido()}</div>
-					
-				</div>
-			</div>
-			<Footer />
-		</>
-	);
+          <div className={styles.tabContent}>{cargarContenido()}</div>
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
 };
 
 export default ScreenAdmin;

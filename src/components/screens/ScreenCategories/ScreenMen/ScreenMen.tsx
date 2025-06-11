@@ -39,14 +39,20 @@ const ScreenMen = () => {
       (producto.talle
         ? talle.includes(producto.talle.talle.toLowerCase())
         : true);
-    
+
     const precioVenta = producto.precio.precioVenta;
 
     const coincideMinPrecio = minPrecio === null || precioVenta >= minPrecio;
     const coincideMaxPrecio = maxPrecio === null || precioVenta <= maxPrecio;
 
     return (
-      coincideBusqueda && coincideCategoria && coincideTipo && coincideTalle && coincideMinPrecio && coincideMaxPrecio);
+      coincideBusqueda &&
+      coincideCategoria &&
+      coincideTipo &&
+      coincideTalle &&
+      coincideMinPrecio &&
+      coincideMaxPrecio
+    );
   });
 
   const productosOrdenados = [...productosFiltrados].sort((a, b) => {
