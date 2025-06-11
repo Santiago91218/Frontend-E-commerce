@@ -27,6 +27,7 @@ export const ModalCrearEditarDetalle: FC<IProps> = ({
     color: detalle?.color || "",
     descripcion: detalle?.descripcion || "",
     estado: detalle?.estado ?? true,
+    imagenes: detalle?.imagenes ?? [],
     precio: detalle?.precio || {
       precioCompra: 0,
       precioVenta: 0,
@@ -111,6 +112,7 @@ export const ModalCrearEditarDetalle: FC<IProps> = ({
         color: detalle.color,
         descripcion: detalle.descripcion,
         estado: detalle.estado,
+        imagenes: detalle?.imagenes ?? [],
         precio: { id: precioId },
         producto: { id: producuto.id },
         stock: detalle.stock,
