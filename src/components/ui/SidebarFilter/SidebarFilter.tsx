@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./SidebarFilter.module.css";
-<<<<<<< HEAD
 import { useFilterStore } from "../../../store/filterStore";
 import { ServiceCategoria } from "../../../services/categoriaService";
-import { useEffect, useState } from "react";
 import { ICategoria } from "../../../types/ICategoria";
 import { ITalle } from "../../../types/ITalle";
 import { ServiceTalle } from "../../../services/talleService";
