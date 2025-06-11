@@ -7,30 +7,63 @@ import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { IDetalleDTO } from "../../../../types/detalles/IDetalleDTO";
 import { ServiceDetalle } from "../../../../services/serviceDetalle";
+import { useFilterStore } from "../../../../store/filterStore";
 
 const ScreenWomen = () => {
   const [productosMujer, setProductosMujer] = useState<IDetalleDTO[] | any>([]);
-  const detalleService = new ServiceDetalle();
   const [inputText, setInputText] = useState<string>("");
+  const { orden, categoria, tipoProducto, talle, minPrecio, maxPrecio } =
+    useFilterStore();
+  useEffect(() => {
+    const detalleService = new ServiceDetalle();
+    detalleService.getDetallesGeneroProduct("FEMENINO").then(setProductosMujer);
+  }, []);
 
-  const productosFiltrados = productosMujer.filter((producto: IDetalleDTO) =>
-    producto.producto.nombre.toLowerCase().includes(inputText.toLowerCase())
-  );
+  const productosFiltrados = productosMujer.filter((producto: IDetalleDTO) => {
+    const nombre = producto.producto.nombre.toLowerCase();
+    const coincideBusqueda = nombre.includes(inputText.toLowerCase());
+
+    const coincideCategoria =
+      categoria.length === 0 ||
+      categoria.includes(producto.producto.categoria.nombre.toLowerCase());
+
+    const coincideTipo =
+      tipoProducto.length === 0 ||
+      tipoProducto.includes(producto.producto.tipoProducto);
+
+    const coincideTalle =
+      talle.length === 0 ||
+      (producto.talle
+        ? talle.includes(producto.talle.talle.toLowerCase())
+        : true);
+
+    const precioVenta = producto.precio.precioVenta;
+
+    const coincideMinPrecio = minPrecio === null || precioVenta >= minPrecio;
+    const coincideMaxPrecio = maxPrecio === null || precioVenta <= maxPrecio;
+
+    return (
+      coincideBusqueda &&
+      coincideCategoria &&
+      coincideTipo &&
+      coincideTalle &&
+      coincideMinPrecio &&
+      coincideMaxPrecio
+    );
+  });
+
+  const productosOrdenados = [...productosFiltrados].sort((a, b) => {
+    if (orden.includes("ascendente")) {
+      return a.precio.precioVenta - b.precio.precioVenta;
+    }
+    if (orden.includes("descendente")) {
+      return b.precio.precioVenta - a.precio.precioVenta;
+    }
+    return 0;
+  });
 
   const handleChangeInputSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
-  };
-
-  useEffect(() => {
-    getProducts();
-  }, []);
-
-  const getProducts = async () => {
-    const prodcutosMujer = await detalleService.getDetallesGeneroProduct(
-      "FEMENINO"
-    );
-
-    setProductosMujer(prodcutosMujer);
   };
   return (
     <>
@@ -59,15 +92,15 @@ const ScreenWomen = () => {
           <div className={styles.productsSection}>
             <div className={styles.searchBar}>
               <input
-                onChange={handleChangeInputSearch}
                 value={inputText}
+                onChange={handleChangeInputSearch}
                 type="search"
                 placeholder="Buscar producto"
               />
               <Search />
             </div>
             <div className={styles.productCards}>
-              {productosFiltrados.map((producto: IDetalleDTO) => (
+              {productosOrdenados.map((producto: IDetalleDTO) => (
                 <CardProducts key={producto.id} products={producto} />
               ))}
             </div>

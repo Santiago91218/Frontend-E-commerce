@@ -1,6 +1,7 @@
 import { IImagen } from "../IImagen";
 import { IPrecio } from "../IPrecio";
 import { IProducto } from "../IProducto";
+import { ITalle } from "../ITalle";
 
 
 export interface IDetalleDTO {
@@ -9,4 +10,5 @@ export interface IDetalleDTO {
   producto: IProducto;
   precio: IPrecio;
   imagenPrincipal: IImagen;
+  talle: ITalle;
 }

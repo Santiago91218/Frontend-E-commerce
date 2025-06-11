@@ -7,31 +7,67 @@ import Footer from "../../../ui/Footer/Footer";
 import { ServiceDetalle } from "../../../../services/serviceDetalle";
 import { useEffect, useState } from "react";
 import { IDetalleDTO } from "../../../../types/detalles/IDetalleDTO";
+import { useFilterStore } from "../../../../store/filterStore";
 
 export const ScreenDestacados = () => {
-     const [productosDestacados, setProductosDestacados] = useState<IDetalleDTO[] | any>(
-        []
-      );
-      const [inputText, setInputText] = useState<string>("");
-      const detalleService = new ServiceDetalle();
-    
-      const productosFiltrados = productosDestacados.filter((producto: IDetalleDTO) =>
-        producto.producto.nombre.toLowerCase().includes(inputText.toLowerCase())
-      );
-    
-      const handleChangeInputSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputText(e.target.value);
-      };
+  const [productosDestacados, setProductosDestacados] = useState<IDetalleDTO[]>([]);
+  const [inputText, setInputText] = useState<string>("");
+    const { orden, categoria, tipoProducto, talle, minPrecio, maxPrecio } =
+      useFilterStore();
+  const detalleService = new ServiceDetalle();
 
-      const getProducts = async () => {
-        const productosDestacados = await detalleService.getProductosDestacados()
-        setProductosDestacados(productosDestacados);
-      };
+  const getProducts = async () => {
+    const productosDestacados = await detalleService.getProductosDestacados();
+    setProductosDestacados(productosDestacados);
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  const productosFiltrados = productosDestacados.filter((producto: IDetalleDTO) => {
+    const nombre = producto.producto.nombre.toLowerCase();
+    const coincideBusqueda = nombre.includes(inputText.toLowerCase());
+
+    const coincideCategoria =
+      categoria.length === 0 ||
+      categoria.includes(producto.producto.categoria.nombre.toLowerCase());
+
+    const coincideTipo =
+      tipoProducto.length === 0 ||
+      tipoProducto.includes(producto.producto.tipoProducto);
+
+    const coincideTalle =
+      talle.length === 0 ||
+      (producto.talle
+        ? talle.includes(producto.talle.talle.toLowerCase())
+        : true);
     
-      useEffect(() => {
-        getProducts();
-      }, []);
-  return  <>
+    const precioVenta = producto.precio.precioVenta;
+
+    const coincideMinPrecio = minPrecio === null || precioVenta >= minPrecio;
+    const coincideMaxPrecio = maxPrecio === null || precioVenta <= maxPrecio;
+
+    return (
+      coincideBusqueda && coincideCategoria && coincideTipo && coincideTalle && coincideMinPrecio && coincideMaxPrecio);
+  });
+
+  const productosOrdenados = [...productosFiltrados].sort((a, b) => {
+    if (orden.includes("ascendente")) {
+      return a.precio.precioVenta - b.precio.precioVenta;
+    }
+    if (orden.includes("descendente")) {
+      return b.precio.precioVenta - a.precio.precioVenta;
+    }
+    return 0;
+  });
+
+  const handleChangeInputSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputText(e.target.value);
+  };
+  
+  return (
+    <>
       <div className={styles.screenDestacados}>
         <Header />
 
@@ -50,7 +86,7 @@ export const ScreenDestacados = () => {
               <Search />
             </div>
             <div className={styles.productCards}>
-              {productosFiltrados.map((producto: IDetalleDTO) => (
+              {productosOrdenados.map((producto: IDetalleDTO) => (
                 <CardProducts key={producto.id} products={producto} />
               ))}
             </div>
@@ -60,4 +96,5 @@ export const ScreenDestacados = () => {
         <Footer />
       </div>
     </>
+  );
 };
