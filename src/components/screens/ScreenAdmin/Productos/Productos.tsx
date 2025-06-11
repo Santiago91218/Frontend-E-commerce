@@ -206,6 +206,7 @@ export const Productos = () => {
                         <div className={styles.containerButtons}>
                           <span
                             onClick={() => {
+                              setDetalleActivo(detalle);
                               setModalAddImagen(true);
                             }}
                           >
@@ -288,8 +289,12 @@ export const Productos = () => {
       )}
       {modalAddImagen && (
         <ModalAgregarImagen
-          closeModal={() => {
+          detalle={detalleActivo!}
+          closeModal={async () => {
             setModalAddImagen(false);
+            if (detalleActivo?.producto.id) {
+              await getDetallesProductos(detalleActivo.producto.id);
+            }
           }}
         />
       )}

@@ -100,68 +100,99 @@ export const ScreenCart = () => {
 									alt={producto.nombre}
 									className={styles.imagen}
 								/>
-								<div className={styles.detalles}>
-									<p className={styles.nombre}>{producto.nombre}</p>
-									<p>Talle: {producto.talle}</p>
-									{producto.descuento && producto.descuento > 0 ? (
-										<p>Precio con descuento: ${producto.precio}</p>
-									) : (
-										<p>Precio: ${producto.precio}</p>
-									)}
 
-									<div className={styles.controlesCantidad}>
-										<span className={styles.labelCantidad}>Cantidad:</span>
-										<div className={styles.simpleContador}>
-											<button
-												className={styles.simpleBoton}
-												onClick={() =>
-													cambiarCantidad(
-														producto.detalleId,
-														Math.max(1, producto.cantidad - 1)
-													)
-												}
-											>
-												−
-											</button>
-											<span className={styles.simpleValor}>
-												{producto.cantidad}
-											</span>
-											<button
-												className={styles.simpleBoton}
-												onClick={() =>
-													cambiarCantidad(
-														producto.detalleId,
-														producto.cantidad + 1
-													)
-												}
-												disabled={
-													producto.cantidad >=
-													(stockMap[producto.detalleId] ?? Infinity)
-												}
-											>
-												＋
-											</button>
-											{producto.cantidad >=
-												(stockMap[producto.detalleId] ?? Infinity) && (
-												<span className={styles.simpleWarningInline}>
-													Stock máximo
-												</span>
-											)}
-										</div>
-									</div>
+								<div className={styles.infoProducto}>
+									<p className={styles.nombre}>{producto.nombre}</p>
+									{producto.talle && (
+										<p className={styles.talle}>Talle: {producto.talle}</p>
+									)}
 								</div>
+
+								<div className={styles.cantidadProducto}>
+									<div className={styles.simpleContador}>
+										<button
+											className={styles.simpleBoton}
+											onClick={() =>
+												cambiarCantidad(
+													producto.detalleId,
+													Math.max(1, producto.cantidad - 1)
+												)
+											}
+										>
+											−
+										</button>
+										<span className={styles.simpleValor}>
+											{producto.cantidad}
+										</span>
+										<button
+											className={styles.simpleBoton}
+											onClick={() =>
+												cambiarCantidad(
+													producto.detalleId,
+													producto.cantidad + 1
+												)
+											}
+											disabled={
+												producto.cantidad >=
+												(stockMap[producto.detalleId] ?? Infinity)
+											}
+										>
+											＋
+										</button>
+									</div>
+									{producto.cantidad >=
+										(stockMap[producto.detalleId] ?? Infinity) && (
+										<span className={styles.simpleWarningInline}>
+											Stock máx: {stockMap[producto.detalleId]}
+										</span>
+									)}
+								</div>
+
+								<div className={styles.precioProducto}>
+									{producto.descuento && producto.descuento > 0 ? (
+										<>
+											<span className={styles.precioOriginal}>
+												$
+												{(
+													producto.precio /
+													(1 - producto.descuento / 100)
+												).toFixed(2)}
+											</span>
+											<span className={styles.descuento}>
+												{producto.descuento}% OFF
+											</span>
+										</>
+									) : null}
+									<span className={styles.precioFinal}>
+										${producto.precio.toFixed(2)}
+									</span>
+								</div>
+
 								<button
 									onClick={() => eliminar(producto.detalleId)}
 									className={styles.botonEliminar}
 								>
-									<Trash2 />
+									<Trash2 size={16} />
 								</button>
 							</div>
 						))}
 					</div>
 
 					<div className={styles.resumen}>
-						<h2 className={styles.resumenTitulo}>Resumen de la compra</h2>
+						<h2 className={styles.resumenTitulo}>Resumen de compra</h2>
+
+						<div className={styles.resumenItem}>
+							<span>Productos ({items.length})</span>
+							<span>${total().toFixed(2)}</span>
+						</div>
+
+						<hr className={styles.linea} />
+
+						<div className={styles.resumenTotal}>
+							<span>Total</span>
+							<span>${total().toFixed(2)}</span>
+						</div>
+
 						<DireccionesCliente
 							usuario={usuario}
 							direccionSeleccionadaId={direccionSeleccionadaId}
@@ -169,19 +200,13 @@ export const ScreenCart = () => {
 							onAgregarDireccionClick={() => setMostrarModalDireccion(true)}
 							recargar={recargarDirecciones}
 						/>
-						{items.map((p) => (
-							<p key={p.detalleId}>
-								{p.nombre} x {p.cantidad} = ${p.precio * p.cantidad}
-							</p>
-						))}
-						<hr className={styles.linea} />
-						<p className={styles.total}>Total a pagar: ${total()}</p>
 
 						<button
 							className={styles.botonConfirmar}
 							onClick={handlePagarUnificado}
+							disabled={items.length === 0}
 						>
-							Pagar con Mercado Pago
+							Continuar compra
 						</button>
 					</div>
 				</div>

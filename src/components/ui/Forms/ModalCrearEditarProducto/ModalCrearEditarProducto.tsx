@@ -7,6 +7,7 @@ import {
 import styles from "./ModalCrearEditarProducto.module.css";
 import { ServiceCategoria } from "../../../../services/categoriaService";
 import { ICategoria } from "../../../../types/ICategoria"; // Asegúrate de importar ICategoria
+import Swal from "sweetalert2";
 
 interface IProps {
   closeModal: () => void;
@@ -14,7 +15,11 @@ interface IProps {
   onSubmit?: (producto: IProducto) => void;
 }
 
-const ModalCrearEditarProducto: FC<IProps> = ({ closeModal, producto, onSubmit }) => {
+const ModalCrearEditarProducto: FC<IProps> = ({
+  closeModal,
+  producto,
+  onSubmit,
+}) => {
   const [categorias, setCategorias] = useState<ICategoria[]>([]); // Estado para las categorías
   const [formState, setFormState] = useState<Omit<IProducto, "id">>({
     disponible: producto?.disponible ?? true,
@@ -28,30 +33,50 @@ const ModalCrearEditarProducto: FC<IProps> = ({ closeModal, producto, onSubmit }
     const fetchCategorias = async () => {
       try {
         const serviceCategoria = new ServiceCategoria();
-        const categoriasData = await serviceCategoria.getCategorias()
-        setCategorias(categoriasData); 
+        const categoriasData = await serviceCategoria.getCategorias();
+        setCategorias(categoriasData);
       } catch (error) {
         console.error("Error al cargar categorías", error);
       }
     };
 
-    fetchCategorias(); 
-  }, []); 
+    fetchCategorias();
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (producto?.id) {
-      onSubmit?.({ ...formState, id: producto.id });
-    } else {
-      const newProducto = { ...formState };
-      console.log(newProducto)
-      onSubmit?.(newProducto as IProducto);
+
+    try {
+      if (producto?.id) {
+        await onSubmit?.({ ...formState, id: producto.id });
+        Swal.fire({
+          title: "Producto editado!",
+          icon: "success",
+        });
+      } else {
+        const newProducto = { ...formState };
+        await onSubmit?.(newProducto as IProducto);
+        Swal.fire({
+          title: "Producto creado!",
+          icon: "success",
+        });
+      }
+
+      closeModal();
+    } catch (error) {
+      console.error("Error al guardar el producto", error);
+      Swal.fire({
+        title: "Error",
+        text: "Hubo un problema al guardar el producto.",
+        icon: "error",
+      });
     }
-    closeModal();
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
 
@@ -100,12 +125,11 @@ const ModalCrearEditarProducto: FC<IProps> = ({ closeModal, producto, onSubmit }
 
           <div className={styles.formGroup}>
             <label>Categoría</label>
-            
+
             <select
-            
               value={formState.categoria.id}
               onChange={(e) => {
-                console.log(e.target)
+                console.log(e.target);
                 const id = Number(e.target.value);
                 const categoria = categorias.find((cat) => cat.id === id);
                 if (categoria) {
@@ -118,8 +142,8 @@ const ModalCrearEditarProducto: FC<IProps> = ({ closeModal, producto, onSubmit }
               required
             >
               <option disabled value={0}>
-                  {"Select categoria"}
-                </option>
+                {"Select categoria"}
+              </option>
               {categorias.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.nombre}
@@ -166,7 +190,7 @@ const ModalCrearEditarProducto: FC<IProps> = ({ closeModal, producto, onSubmit }
             >
               Cancelar
             </button>
-            <button  className={styles.submitButton} type="submit">
+            <button className={styles.submitButton} type="submit">
               Confirmar
             </button>
           </div>

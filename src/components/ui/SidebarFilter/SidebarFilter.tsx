@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import styles from "./SidebarFilter.module.css";
+<<<<<<< HEAD
 import { useFilterStore } from "../../../store/filterStore";
 import { ServiceCategoria } from "../../../services/categoriaService";
 import { useEffect, useState } from "react";
@@ -43,6 +45,7 @@ const SidebarFilter = () => {
     <div className={styles.sidebarFilterContainer}>
       <div className={styles.filterButtonContainer}>
         <button onClick={resetFiltros}>Resetear Filtros</button>
+
       </div>
 
             <div className={styles.priceFilterSection}>

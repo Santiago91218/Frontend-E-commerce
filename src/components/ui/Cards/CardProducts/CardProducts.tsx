@@ -14,7 +14,7 @@ const CardProducts: FC<IProps> = ({ products }) => {
   const isDescuentoActivo = (descuento: IDescuento | undefined): boolean => {
     if (!descuento) return false;
 
-    const hoy = new Date(); 
+    const hoy = new Date();
     const fechaInicio = new Date(descuento.fechaInicio);
     const fechaFin = new Date(descuento.fechaFin);
 
@@ -26,7 +26,7 @@ const CardProducts: FC<IProps> = ({ products }) => {
   const handleNavigate = (id: number) => {
     navigate(`/product/${id}`);
   };
-  
+
   const calcularDescuento = (
     precioVenta: number,
     porcentajeDescuento: number
@@ -36,7 +36,7 @@ const CardProducts: FC<IProps> = ({ products }) => {
     }
     return precioVenta - precioVenta * (porcentajeDescuento / 100);
   };
-  
+
   if (!products || !products.producto) {
     return <div>Producto no disponible</div>;
   }
@@ -63,7 +63,9 @@ const CardProducts: FC<IProps> = ({ products }) => {
 
         <div className={styles.productDetails}>
           <div className={styles.productInfo}>
-            <p className={styles.productName}>{products.producto.nombre}</p>
+            <p className={styles.productName}>
+              {products.producto.nombre} {products.color}
+            </p>
             <p className={styles.productPrice}>
               {descuentoActivo ? (
                 <>

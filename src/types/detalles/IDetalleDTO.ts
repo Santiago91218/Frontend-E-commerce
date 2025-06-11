@@ -3,10 +3,10 @@ import { IPrecio } from "../IPrecio";
 import { IProducto } from "../IProducto";
 import { ITalle } from "../ITalle";
 
-
 export interface IDetalleDTO {
-  id?:number
-  disponible?:boolean
+  id?: number;
+  disponible?: boolean;
+  color: string;
   producto: IProducto;
   precio: IPrecio;
   imagenPrincipal: IImagen;
