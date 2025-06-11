@@ -4,6 +4,7 @@ import { ServiceCategoria } from "../../../services/categoriaService";
 import { ICategoria } from "../../../types/ICategoria";
 import { ITalle } from "../../../types/ITalle";
 import { ServiceTalle } from "../../../services/talleService";
+import { useEffect, useState } from "react";
 
 const SidebarFilter = () => {
   const [categorias, setCategorias] = useState<ICategoria[]>([]);
